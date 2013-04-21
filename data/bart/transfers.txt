@@ -1,0 +1,7 @@
+from_stop_id,to_stop_id,transfer_type
+19TH_N,19TH_N,1
+MCAR_S,MCAR_S,1
+BALB,BALB,0
+BAYF,BAYF,0
+SBRN,SBRN,1
+

@@ -1,0 +1,8 @@
+﻿fare_id,price,currency_type,payment_method,transfers,transfer_duration
+"OW_1_20121001",3.0000,"USD","1",,
+"OW_2_20121001",5.0000,"USD","1",,
+"OW_3_20121001",7.0000,"USD","1",,
+"OW_4_20121001",9.0000,"USD","1",,
+"OW_5_20121001",11.0000,"USD","1",,
+"OW_6_20121001",13.0000,"USD","1",,
+

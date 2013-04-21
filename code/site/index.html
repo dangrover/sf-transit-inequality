@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Mass Transit &amp; Inequality in the Bay Area</title>
+   
+    <link href="../assets/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 40px;
+      }
+
+      /* Custom container */
+      .container-narrow {
+        margin: 0 auto;
+        max-width: 700px;
+      }
+      .container-narrow > hr {
+        margin: 30px 0;
+      }
+
+    </style>
+    <link href="./assets/css/bootstrap.css" rel="stylesheet">
+
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script lang="text/javascript">
+var all_agency_data = {};
+
+$(document).ready(function(){
+  data_paths = ["data/BART.json", "data/CalTrain.json"];
+
+  $(data_paths).each(function(i, path){
+    $.getJSON(path, function(data){
+      all_agency_data[data["agency_name"]] = data;
+    });
+  });
+});
+
+</script>
+  </head>
+
+  <body>
+
+    <div class="container-narrow">
+
+      <div class="masthead">
+        <h2>Mass Transit &amp; Inequality in the Bay Area</h2>
+      </div>
+
+      <hr>
+
+      <div class="span12">
+        <h4>Choose a Line</h4>
+        <dl>
+          <dt>MUNI</dt>
+          <dd></dd>
+          <dt>BART</dt>
+          <dd></dd>
+          <dt>CalTrain</dt>
+          <dd></dd>
+        </dl>
+
+      </div>
+
+      <hr>
+
+
+      <div class="footer">
+        <p>by @dangrover and @michaelbelfrage</p>
+      </div>
+
+    </div> <!-- /container -->
+
+
+  </body>
+</html>
