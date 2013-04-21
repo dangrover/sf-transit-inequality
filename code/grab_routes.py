@@ -6,42 +6,43 @@ import census
 
 census_api = census.Census(CENSUS_API_KEY, year=2010)
 
-# There are too many MUNI bus lines, so just stick to the light rail and the major ones
-MUNI_ALLOWED_ROUTE_SHORT_NAMES = ["N", "J", "F", "M", "L", "T", "K", "49", "30", "38", "22", "1", "5", "6", "47", "31", "8X", "19"]
+# There are too many MUNI bus lines, so just stick to the major ones
+MUNI_ALLOWED_ROUTE_SHORT_NAMES = ["49", "30", "38", "22", "1", "14", "5", "9", "47", "31", "8X", "19"]
 
 # Make a file for each agency covered 
 for agency_name, path in ALL_GTFS_PATHS.iteritems():
 	print "Starting %s" % agency_name
-
 	agency_json = {"agency_name":agency_name, "stops":{}, "routes":{}}
 
 	is_muni = (agency_name == "MUNI")
 
 	schedule = transitfeed.schedule.Schedule()
 	schedule.Load(path)
-
 	routes = schedule.GetRouteList()
 	trips = schedule.GetTripList()
 	stops = schedule.GetStopList()
 
-	stop_ids_to_use = set()
+	stop_ids_to_use = set() # Don't grab census info for stops on routes we're ignoring
+
 	# Build route list
 	for r in routes:
 		if is_muni:
-			if not r.route_short_name in MUNI_ALLOWED_ROUTE_SHORT_NAMES:
+			if (not r.route_type == 0) and not r.route_short_name in MUNI_ALLOWED_ROUTE_SHORT_NAMES:
+				print "Skipping non-train route %s" % r
 				continue
 			route_name = r.route_short_name + " " + r.route_long_name
 		else:
 			route_name = r.route_long_name
 
-		print "looking at route %s" % route_name
-
+		# Get an ordered list of stops by looking at which of this route's
+		# "trips" has the most stops, and then using that.
+		# Sometimes they have limited runs, which is no good.
 		route_trips = filter(lambda t: t.route_id == r.route_id, trips)
 		if len(route_trips) == 0:
 			continue
 
-		trip = route_trips[0] # Use just the first trip
-		stop_ids_in_order = map(lambda st: st.stop_id, trip.GetStopTimes())
+		trips_sorted = sorted(route_trips, lambda a, b: cmp(a.GetCountStopTimes(), b.GetCountStopTimes()), reverse=True)
+		stop_ids_in_order = map(lambda st: st.stop_id, trips_sorted[0].GetStopTimes())
 		stop_ids_to_use.update(stop_ids_in_order)
 
 		route_json = {"name":route_name, "stop_ids":stop_ids_in_order}
@@ -51,7 +52,6 @@ for agency_name, path in ALL_GTFS_PATHS.iteritems():
 	#  Build stop list, look up related info
 	for s in stops:
 		if not s.stop_id in stop_ids_to_use:
-			print "skipping stop %s" % s.stop_name
 			continue
 
 		# Get FIPS info from the FCC API, separate it out
