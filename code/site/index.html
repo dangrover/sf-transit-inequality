@@ -1,280 +1,173 @@
-
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Mass Transit &amp; Inequality in the Bay Area</title>
-      <link href="./assets/css/bootstrap.css" rel="stylesheet">
-    <style type="text/css">
-      body {
-       padding-top:20px;
-       background:#eee;
-      }
-
-      .container{
-        margin: 0 auto;
-        max-width: 800px;
-        border:#ccc 1px solid;
-        padding:20px;
-        background: #fff;
-        border-radius: 4px;
-      }
-
-
-      path.data-line {
-          stroke-width: 4;
-          fill: none;
-         -webkit-filter: drop-shadow( -5px -5px 5px #000 );
-          filter: drop-shadow( -5px -5px 5px #000 ); /* Same syntax as box-shadow */
-
-      }
-
-      p{
-        font-family: Georgia, serif;
-      }
-
-      .axis line, .axis path {
-        fill: none;
-        stroke: black;
-        shape-rendering: crispEdges;
-      }
-      .axis text {
-        font-family: Georgia, serif;
-        font-size: 11px;
-      }
-
-      #graph svg{
-        overflow: visible;
-      }
-
-      .tooltip{
-        background: #000;
-        color:#fff;
-        padding:5px;
-        border-radius: 5px;
-        width:200px;
-      }
-
-      .nav-stacked a{
-        font-size:11px;
-        height:10px;
-        padding:0;
-      }
-
-      .swatch{
-        width:15px;
-        height:15px;
-        border:#333 1px solid;
-        border-radius: 2px;
-        display:block;
-        float:left;
-        vertical-align: middle;
-        margin-right:5px;
-      }
-    </style>
- 
-
- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-    <script src="./assets/js/bootstrap.min.js"></script>
- <script src="./assets/js/d3/d3.min.js"></script>
-
-<script lang="text/javascript">
-var all_agency_data = {};
-
-$(document).ready(function(){
-  data_paths = ["data/BART.json", "data/CalTrain.json", "data/MUNI.json"];
-
-  // Load the data for each agency
-  $(data_paths).each(function(i, path){
-    $.getJSON(path, function(data){
-      all_agency_data[data.agency_name] = data;
-      console.log("Loaded %o", all_agency_data);
-      if(Object.keys(all_agency_data).length == data_paths.length) display_choices();
-    });
-  });
-});
-
-function display_choices(){
-  console.log("choices = %o", all_agency_data);
-
-  $.each(all_agency_data, function(name, agency){
-    $("#choices").append("<dt>"+agency.agency_name+"</dt>");
-    dd = $("#choices").append($('<dd/>'));
-    route_list = $('<ul/>');
-    dd.append(route_list);
-    route_list.attr('class','nav nav-tabs nav-stacked');
+<html lang="en" data-ng-app="app">
     
-    $.each(agency.routes, function(route_id, route_info){
-      li = $("<li/>");
-      link = $("<a href=\"#\"><span class=\"swatch\" style=\"background-color:"+route_info["color"]+";\"></span>"+route_info.name+"</a>");
-      li.append(link);
-      route_list.append(li);
-      link.click(function(event){display_route(agency.agency_name, route_id);});
-    });
-  });
-}
+    <head>
+        <meta charset="utf-8">
+        <title>Income vs. Transit Stops in the San Francisco Bay Area</title>
+        <link href="./assets/css/bootstrap.css" rel="stylesheet">
+        <style type="text/css">
+          body {
+              padding-top: 20px;
+              background: #eee;
+          }
 
+          .container {
+              margin: 0 auto;
+              max-width: 800px;
+              border: #ccc 1px solid;
+              padding: 20px;
+              background: #fff;
+              border-radius: 4px;
+          }
 
-function display_route(agency_name, route_id){
-  console.log("showing route "+route_id+" for agency "+agency_name);
-  $("#graph").html(""); // clear the graph
+          path.data-line {
+              stroke-width: 4;
+              fill: none;
+              -webkit-filter: drop-shadow( -5px -5px 5px #000 );
+              filter: drop-shadow( -5px -5px 5px #000
+                      );
+           /* Same syntax as box-shadow */
+          }
 
-  // transform the data first
-  var stop_ids = all_agency_data[agency_name].routes[route_id].stop_ids;
-  var stops = [];
-  var incomes = [];
-  $.each(stop_ids, function(index, stop_id){
-    stop_info = all_agency_data[agency_name].stops[stop_id];
-    stops.push(stop_info);
-    incomes.push(stop_info.median_income);
-  });
+          p {
+              font-family: Georgia, serif;
+          }
 
-  // dimensions
-  var w = 600,  h = 400, margin = 45, dot_r = 8;
-  yScale = d3.scale.linear().domain([200000, 0]).range([margin, h - margin]);
-  xScale = d3.scale.linear().domain([0, stop_ids.length]).range([margin, w - margin]);
-  xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(stops.length).tickFormat(function(d, i){if(stops[i]){return stops[i].name;}});
-  yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(8).tickFormat(function(d,i){return "$"+d/1000+"K";})
+          .axis line, .axis path {
+              fill: none;
+              stroke: black;
+              shape-rendering: crispEdges;
+          }
 
+          .axis text {
+              font-family: Georgia, serif;
+              font-size: 11px;
+          }
 
-money_format = d3.format(",");
-route_color = all_agency_data[agency_name].routes[route_id].color;
-if(route_color == undefined){
-  route_color = "#000";
-}
+          #graph svg {
+              overflow: visible;
+          }
 
-var tooltip = d3.select("#graph")
-  .append("div")
-  .style("visibility", "hidden")
-  .style("z-index", "10")
-  .style("position", "absolute")
-  .style("background", "white")
-  .style("border", "#ccc 1px solid")
-  .style("border-radius", "4px")
-  .style("padding", "4px")
-  .style("font-size","11px")
-  .style("box-shadow", "0px 2px 3px rgba(0,0,0,0.5)")
+          .tooltip {
+              background: #000;
+              color: #fff;
+              padding: 5px;
+              border-radius: 5px;
+              width: 200px;
+          }
 
+          .nav-stacked a {
+              font-size: 11px;
+              height: 10px;
+              padding: 0;
+          }
 
-  var svg = d3.select("#graph")
-      .append("svg:svg")
-      .attr("width", w)
-      .attr("height", h+90)
-
-  var line = d3.svg.line()
-      .interpolate("cardinal")
-      .x(function(d,i) { return xScale(i); })
-      .y(function(d,i) { return yScale(d); });
-
-  var path = svg.append("svg:path")
-  .attr("d", line(incomes))
-  .attr("class", "data-line")
-  .attr("stroke", route_color);
-
-      
-  var dots =  svg.append("g").selectAll("circle")
-         .data(incomes)
-         .enter()
-        .append("circle")
-        .attr("cx",function(d,i) { return xScale(i); })
-        .attr("cy",function(d,i) { return yScale(d); })
-        .attr("r", dot_r)
-        .attr("fill-opacity", 0.3)
-          .on("mouseover", function(d, i){
-            tooltip.html(function(){return "<strong>"+stops[i].name+"</strong><br/>Median income: $"+money_format(stops[i].median_income)+"<br/>Census Tract: "+stops[i].state_fips+stops[i].county_fips+stops[i].tract_fips;})  
-                .style("left", (d3.event.pageX) + "px")     
-                .style("top", (d3.event.pageY) + "px");    
-       
-            tooltip.style("visibility", "visible");
-            this.setAttribute("r", "10");
-          })
-  .on("mousemove", function(){tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+6)+"px");})
-  .on("mouseout", function(){tooltip.style("visibility", "hidden");this.setAttribute("r", dot_r);});
-  
-
-  //Create X axis
-  svg.append("g")
-    .attr("class", "axis")
-    .attr("transform", "translate(0," + (h - margin) + ")")
-    .call(xAxis)
-    .selectAll("text")  
-            .style("text-anchor", "end")
-            .attr("dy", "-.5em")
-            .attr('dx', "-1em")
-            .attr("transform", "rotate(-90)");
-  
-  //Create Y axis
-  svg.append("g")
-    .attr("class", "axis")
-    .attr("transform", "translate(" + (margin) + ",0)")
-    .call(yAxis);
-}
-
-</script>
-  </head>
-
-  <body>
-
-    <!-- facebook gizmo -->
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=196057697206036";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-    <div class="container">
-
-      <div class="row">
-        <div class="span8"><h3>Inequality &amp; Mass Transit in San Francisco</h3></div>
-        <div class="pull-right">
+          .swatch {
+              width: 15px;
+              height: 15px;
+              border: #333 1px solid;
+              border-radius: 2px;
+              display: block;
+              float: left;
+              vertical-align: middle;
+              margin-right: 5px;
+          }
+        </style>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="./assets/lib/bootstrap/bootstrap.min.js"></script>
+        <script src="./assets/lib/d3/d3.min.js"></script>
+        <script src="./assets/lib/angular/angular.min.js"></script>
+        <script src="./assets/js/app.js"></script>
+    </head>
     
-
-          <a href="https://twitter.com/share" class="twitter-share-button" data-via="DanGrover">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-
-<br/>
-          <div class="fb-like" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></div>
-          <br/>
-
-<iframe src="http://ghbtns.com/github-btn.html?user=dangrover&amp;repo=sf-transit-inequality&amp;type=watch&amp;count=true"
-  allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-
-
+    <body>
+        <!-- Remember this style <div style=" width: 27px; height: 27px; border-radius:
+        30px; font-size: 18px; color: white; line-height: 27px; text-align: center;
+        background: red; font-weight: bold; float: left; margin-right: 4px; ">J</div>
+ -->
+        <div class="container" data-ng-controller="AppCtrl">
+            <div class="row">
+                <div class="span8">
+                    <h3>Income vs. Transit Stops in San Francisco</h3>
+                </div>
+                <div class="pull-right">
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-via="DanGrover">Tweet</a>
+                    <script>
+                      !function(d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0],
+                          p = /^http:/.test(d.location) ? 'http' : 'https';
+                        if (!d.getElementById(id)) {
+                          js = d.createElement(s);
+                          js.id = id;
+                          js.src = p + '://platform.twitter.com/widgets.js';
+                          fjs.parentNode.insertBefore(js, fjs);
+                        }
+                      }(document, 'script', 'twitter-wjs');
+                    </script>
+                    <br/>
+                    <!-- facebook gizmo -->
+                    <div id="fb-root">
+                    </div>
+                    <script>
+                    (function(d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                        if (d.getElementById(id)) return;
+                        js = d.createElement(s);
+                        js.id = id;
+                        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=196057697206036";
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'));
+                    </script>
+                    <div class="fb-like" data-send="false" data-layout="button_count" data-width="100"
+                    data-show-faces="false">
+                    </div>
+                    <br/>
+                    <iframe src="http://ghbtns.com/github-btn.html?user=dangrover&amp;repo=sf-transit-inequality&amp;type=watch&amp;count=true"
+                    allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20">
+                    </iframe>
+                </div>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="span6">
+                    <p>
+                        The San Francisco Bay Area is home to extreme wealth and poverty. Inspired by
+                        <a href="http://newyorker.com/sandbox/business/subway.html">a recent <i>New Yorker</i> feature</a>, 
+                        we've mapped the area's transit stops to the median income in the areas
+                        they serve, using data from the 2010 US Census.
+                    </p>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span3">
+                    <dl id="choices">
+                      <div class="agency-container" data-ng-repeat="agency in agencies">
+                        <dt>{{agency.name}}</dt>
+                        <dd></dd>
+                        <ul class="nav nav-tabs nav-stacked">
+                            <li data-ng-repeat="(routeId, route) in agency.routes">
+                                <a href="#" data-ng-click="displayRoute(agency.name, routeId)"><span class="swatch" data-ng-style="{'background-color': route.color}"></span>{{route.name}}</a>
+                            </li>
+                        </ul>
+                      </div>
+                    </dl>
+                </div>
+                <div class="span6">
+                    <div id="graph">
+                        Tap a line on the left to get started.
+                    </div>
+                    <hr/>
+                    <h5>
+                        Methodology
+                    </h5>
+                    <p>
+                        Blah
+                    </p>
+                </div>
+            </div>
         </div>
-      </div>
-      <hr/>
+        <!-- /container -->
+    </body>
 
-      <div class="row">
-        <div class="span6"><p>The San Francisco Bay Area is home to extreme wealth and poverty. Inspired by <a href="http://newyorker.com/sandbox/business/subway.html">a recent <i>New Yorker</i> feature</a>, we've mapped the area's transit stops to the median income in the areas they serve, using data from the 2010 US Census.</p>
-</p></div>
-      </div>
-
-      <div class="row">
-
-      <div class="span3">
-        <dl id="choices">
-        </dl>
-      </div>
-
-      <div class="span6">
-        <div id="graph">
-          Tap a line on the left to get started.
-        </div>
-
-        <hr/>
-        <h5>Methodology</h5>
-        <p>Blah</p>
-
-      </div>
-
-      </div>
-
-    </div> <!-- /container -->
-
-
-  </body>
 </html>
