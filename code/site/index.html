@@ -6,72 +6,98 @@
         <title>Income vs. Transit Stops in the San Francisco Bay Area</title>
         <link href="./assets/css/bootstrap.css" rel="stylesheet">
         <style type="text/css">
-          body {
-              padding-top: 20px;
-              background: #eee;
-          }
+            body {
+                padding-top: 20px;
+                background: #eee;
+            }
 
-          .container {
-              margin: 0 auto;
-              max-width: 800px;
-              border: #ccc 1px solid;
-              padding: 20px;
-              background: #fff;
-              border-radius: 4px;
-          }
+            .container {
+                margin: 0 auto;
+                max-width: 800px;
+                border: #ccc 1px solid;
+                padding: 20px;
+                background: #fff;
+                border-radius: 4px;
+            }
 
-          path.data-line {
-              stroke-width: 4;
-              fill: none;
-              -webkit-filter: drop-shadow( -5px -5px 5px #000 );
-              filter: drop-shadow( -5px -5px 5px #000
-                      );
-           /* Same syntax as box-shadow */
-          }
+            path.data-line {
+                stroke-width: 4;
+                fill: none;
+                -webkit-filter: drop-shadow( -5px -5px 5px #000 );
+                filter: drop-shadow( -5px -5px 5px #000);
+                /* Same syntax as box-shadow */
+            }
 
-          p {
-              font-family: Georgia, serif;
-          }
+            p {
+                font-family: Georgia, serif;
+            }
 
-          .axis line, .axis path {
-              fill: none;
-              stroke: black;
-              shape-rendering: crispEdges;
-          }
+            .axis line, .axis path {
+                fill: none;
+                stroke: black;
+                shape-rendering: crispEdges;
+            }
 
-          .axis text {
-              font-family: Georgia, serif;
-              font-size: 11px;
-          }
+            .axis text {
+                font-family: Georgia, serif;
+                font-size: 11px;
+            }
 
-          #graph svg {
-              overflow: visible;
-          }
+            #graph svg {
+                overflow: visible;
+            }
 
-          .tooltip {
-              background: #000;
-              color: #fff;
-              padding: 5px;
-              border-radius: 5px;
-              width: 200px;
-          }
+            .tooltip {
+                background: #000;
+                color: #fff;
+                padding: 5px;
+                border-radius: 5px;
+                width: 200px;
+            }
 
-          .nav-stacked a {
-              font-size: 11px;
-              height: 10px;
-              padding: 0;
-          }
+            .nav-stacked a {
+                font-size: 11px;
+                height: 10px;
+                padding: 0;
+            }
 
-          .swatch {
-              width: 15px;
-              height: 15px;
-              border: #333 1px solid;
-              border-radius: 2px;
-              display: block;
-              float: left;
-              vertical-align: middle;
-              margin-right: 5px;
-          }
+            .swatch {
+                width: 15px;
+                height: 15px;
+                border: #333 1px solid;
+                border-radius: 2px;
+                display: block;
+                float: left;
+                vertical-align: middle;
+                margin-right: 5px;
+            }
+
+            .muni-routes {
+                margin-bottom: 4px;
+                height: 27px;
+            }
+
+            .muni-line a {
+                background: red;
+                border-radius: 30px;
+                color: white;
+                float: left;
+                font-size: 18px;
+                font-weight: bold;
+                height: 27px;
+                line-height: 27px;
+                margin-right: 4px;
+                text-align: center;
+                width: 27px;
+            }
+
+            .muni-line a:hover {
+                text-decoration: none;
+            }
+
+            .agency-routes {
+                clear: both;
+            }
         </style>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="./assets/lib/bootstrap/bootstrap.min.js"></script>
@@ -81,10 +107,6 @@
     </head>
     
     <body>
-        <!-- Remember this style <div style=" width: 27px; height: 27px; border-radius:
-        30px; font-size: 18px; color: white; line-height: 27px; text-align: center;
-        background: red; font-weight: bold; float: left; margin-right: 4px; ">J</div>
- -->
         <div class="container" data-ng-controller="AppCtrl">
             <div class="row">
                 <div class="span8">
@@ -142,13 +164,22 @@
             <div class="row">
                 <div class="span3">
                     <dl id="choices">
-                      <div class="agency-container" data-ng-repeat="agency in agencies">
+                      <div class="agency-container" data-ng-repeat="agency in agencies" data-ng-switch data-on="agency.name">
                         <dt>{{agency.name}}</dt>
                         <dd></dd>
-                        <ul class="nav nav-tabs nav-stacked">
-                            <li data-ng-repeat="(routeId, route) in agency.routes">
+                        <div class="muni-routes" data-ng-switch-when="MUNI">
+                              <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1094')" style="background: #f8a637">J</a></div>
+                              <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1196')" style="background: #529cbb">K</a></div>
+                              <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1198')" style="background: #92278f">L</a></div>
+                              <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1199')" style="background: #028753">M</a></div>
+                              <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1093')" style="background: #00529a">N</a></div>
+                              <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1197')" style="background: #ffcc00; color: black">S</a></div>
+                              <small style="float:left; margin-top: 4px"><a href="#" data-ng-click="showMoreMuniClick()" data-ng-hide="showMoreMuni">(more)</a></small>
+                        </div>
+                        <ul class="agency-routes nav nav-tabs nav-stacked" data-ng-show="agency.name!='MUNI' || showMoreMuni">
+                              <li data-ng-repeat="(routeId, route) in agency.routes">
                                 <a href="#" data-ng-click="displayRoute(agency.name, routeId)"><span class="swatch" data-ng-style="{'background-color': route.color}"></span>{{route.name}}</a>
-                            </li>
+                              </li>
                         </ul>
                       </div>
                     </dl>

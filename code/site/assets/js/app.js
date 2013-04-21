@@ -24,6 +24,11 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         });
     });
 
+    // Show more Muni
+    $scope.showMoreMuniClick = function () {
+        $scope.showMoreMuni = true;
+    };
+
     // Display the Graph for a particular Route
     $scope.displayRoute = function (agencyName, routeId) {
         console.log("showing route " + routeId + " for agency " + agencyName);
