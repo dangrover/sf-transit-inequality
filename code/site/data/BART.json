@@ -21,7 +21,8 @@
         "WDUB",
         "DUBL"
       ],
-      "name": "Dublin/Pleasanton - Daly City"
+      "name": "Dublin/Pleasanton - Daly City",
+      "color": "#3babf0"
     },
     "03": {
       "stop_ids": [
@@ -44,12 +45,12 @@
         "DELN",
         "RICH"
       ],
-      "name": "Fremont - Richmond"
+      "name": "Fremont - Richmond",
+      "color": "#f6a81b"
     },
     "01": {
       "stop_ids": [
         "MLBR",
-        "SFIA",
         "SBRN",
         "SSAN",
         "COLM",
@@ -75,7 +76,8 @@
         "NCON",
         "PITT"
       ],
-      "name": "Pittsburg/Bay Point - SFIA/Millbrae"
+      "name": "Pittsburg/Bay Point - Millbrae",
+      "color": "#faed21"
     },
     "07": {
       "stop_ids": [
@@ -103,7 +105,8 @@
         "DELN",
         "RICH"
       ],
-      "name": "Richmond - Daly City/Millbrae"
+      "name": "Richmond - Millbrae",
+      "color": "#e90020"
     },
     "05": {
       "stop_ids": [
@@ -127,7 +130,8 @@
         "BALB",
         "DALY"
       ],
-      "name": "Fremont - Daly City"
+      "name": "Fremont - Daly City",
+      "color": "#4fbd42"
     }
   },
   "agency_name": "BART",

@@ -5,8 +5,8 @@ import os
 OUTPUT_DIR = os.path.dirname(os.path.realpath(__file__))+"/../output"
 STOP_INFO_CSV_NAME = "all-stops.csv"
 
-ALL_GTFS_PATHS = {"BART":"/Users/dangrover/Dropbox/Projects/CensusDataBySubwayStop/data/bart",
-			 	 "CalTrain": "/Users/dangrover/Dropbox/Projects/CensusDataBySubwayStop/data/caltrain",
+ALL_GTFS_PATHS = {#"BART":"/Users/dangrover/Dropbox/Projects/CensusDataBySubwayStop/data/bart",
+			 	 #"CalTrain": "/Users/dangrover/Dropbox/Projects/CensusDataBySubwayStop/data/caltrain",
 			 	 "MUNI": "/Users/dangrover/Dropbox/Projects/CensusDataBySubwayStop/data/muni"}
 
 
