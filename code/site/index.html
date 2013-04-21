@@ -168,13 +168,13 @@
                         <dt>{{agency.name}}</dt>
                         <dd></dd>
                         <div class="muni-routes" data-ng-switch-when="MUNI">
-                              <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1094')" style="background: #f8a637">J</a></div>
-                              <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1196')" style="background: #529cbb">K</a></div>
-                              <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1198')" style="background: #92278f">L</a></div>
-                              <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1199')" style="background: #028753">M</a></div>
-                              <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1093')" style="background: #00529a">N</a></div>
-                              <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1197')" style="background: #ffcc00; color: black">S</a></div>
-                              <small style="float:left; margin-top: 4px"><a href="#" data-ng-click="showMoreMuniClick()" data-ng-hide="showMoreMuni">(more)</a></small>
+                            <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1093')" style="background: #00529a">N</a></div>
+                            <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1198')" style="background: #92278f">L</a></div>
+                            <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1199')" style="background: #028753">M</a></div>
+                            <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1196')" style="background: #529cbb">K</a></div>
+                            <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1096')" style="background: #ed1c24">T</a></div>
+                            <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1094')" style="background: #f8a637">J</a></div>
+                            <small style="float:left; margin-top: 4px"><a href="#" data-ng-click="showMoreMuniClick()" data-ng-hide="showMoreMuni">(more)</a></small>
                         </div>
                         <ul class="agency-routes nav nav-tabs nav-stacked" data-ng-show="agency.name!='MUNI' || showMoreMuni">
                               <li data-ng-repeat="(routeId, route) in agency.routes">
