@@ -4,6 +4,9 @@ import os
 import transitfeed
 import census
 
+# Builds a JSON file containing a transit systems routes coupled with census data
+# Uses GTFS feeds and the census API.
+
 census_api = census.Census(CENSUS_API_KEY, year=2010)
 
 # There are too many MUNI bus lines, so just stick to the major ones
@@ -34,9 +37,9 @@ for agency_name, path in ALL_GTFS_PATHS.iteritems():
 		else:
 			route_name = r.route_long_name
 
-		# Get an ordered list of stops by looking at which of this route's
-		# "trips" has the most stops, and then using that.
-		# Sometimes they have limited runs, which is no good.
+		# Get an ordered list of stops by looking at this route's "trips."
+		# Some of them will be limited runs, so we want to pick the trip that covers
+		# the most stops. 
 		route_trips = filter(lambda t: t.route_id == r.route_id, trips)
 		if len(route_trips) == 0:
 			continue
@@ -83,7 +86,3 @@ for agency_name, path in ALL_GTFS_PATHS.iteritems():
 	output_file.write(json.dumps(agency_json))
 	output_file.close()
 	
-	#for t in trips:
-	#	print "trip = %s" % t
-
-#print "json = %s" % json_output
