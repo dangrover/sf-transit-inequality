@@ -15,7 +15,7 @@
       /* Custom container */
       .container-narrow {
         margin: 0 auto;
-        max-width: 700px;
+        max-width: 900px;
       }
       .container-narrow > hr {
         margin: 30px 0;
@@ -27,17 +27,44 @@
  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <script lang="text/javascript">
-var all_agency_data = {};
+var all_agency_data = [];
 
 $(document).ready(function(){
   data_paths = ["data/BART.json", "data/CalTrain.json"];
 
+  // Load the data for each agency
   $(data_paths).each(function(i, path){
     $.getJSON(path, function(data){
-      all_agency_data[data["agency_name"]] = data;
+      all_agency_data.push(data);
+      if(all_agency_data.length == data_paths.length) display_choices();
     });
   });
 });
+
+function display_choices(){
+  console.log("choices = %o", all_agency_data);
+
+  $(all_agency_data).each(function(i, agency){
+    $("#choices").append("<dt>"+agency.agency_name+"</dt>");
+    dd = $("#choices").append($('<dd/>'));
+    route_list = $('<ul/>');
+    dd.append(route_list);
+    route_list.attr('class','nav nav-pills');
+    
+    $.each(agency.routes, function(route_id, route_info){
+      li = $("<li/>");
+      link = $("<a href=\"#\">"+route_info.name+"</a>");
+      li.append(link);
+      route_list.append(li);
+      link.click(function(event){display_route(agency.agency_name, route_info.name);});
+    });
+  });
+}
+
+
+function display_route(agency_name, route_id){
+  alert("showing route "+route_id+" for agency "+agency_name);
+}
 
 </script>
   </head>
@@ -54,13 +81,7 @@ $(document).ready(function(){
 
       <div class="span12">
         <h4>Choose a Line</h4>
-        <dl>
-          <dt>MUNI</dt>
-          <dd></dd>
-          <dt>BART</dt>
-          <dd></dd>
-          <dt>CalTrain</dt>
-          <dd></dd>
+        <dl id="choices">
         </dl>
 
       </div>
