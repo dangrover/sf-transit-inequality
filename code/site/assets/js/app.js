@@ -22,6 +22,8 @@ angular.module('app').controller('AppCtrl', ['$scope', function($scope) {
     });
 
     $scope.displayRoute = function (agencyName, routeId) {
+        // @mikez: This still needs refactoring. Doing now.
+
         console.log("showing route " + routeId + " for agency " + agencyName);
         $("#graph").html(""); // clear the graph
         // transform the data first
