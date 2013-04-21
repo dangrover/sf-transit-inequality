@@ -167,12 +167,12 @@ var tooltip = d3.select("#graph")
       .x(function(d,i) { return xScale(i); })
       .y(function(d,i) { return yScale(d); });
 
-  svg.append("svg:path")
+  var path = svg.append("svg:path")
   .attr("d", line(incomes))
   .attr("class", "data-line")
   .attr("stroke", route_color);
-      
 
+      
   var dots =  svg.append("g").selectAll("circle")
          .data(incomes)
          .enter()
@@ -239,7 +239,7 @@ var tooltip = d3.select("#graph")
 <br/>
           <div class="fb-like" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></div>
           <br/>
-          
+
 <iframe src="http://ghbtns.com/github-btn.html?user=dangrover&amp;repo=sf-transit-inequality&amp;type=watch&amp;count=true"
   allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
 
