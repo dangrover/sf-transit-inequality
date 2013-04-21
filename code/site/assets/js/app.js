@@ -1,10 +1,13 @@
 angular.module('app', []);
 
-angular.module('app').controller('AppCtrl', ['$scope', function($scope) {
-    var DATA_SOURCES = ["data/BART.json", "data/CalTrain.json", "data/MUNI.json"];
-    var agencyData = {};
+angular.module('app').constant('DATA_SOURCES',
+    ["data/BART.json", "data/CalTrain.json", "data/MUNI.json"]
+);
+
+angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function($scope, DATA_SOURCES) {
 
     // Load the data for each agency
+    var agencyData = {};
     var numberAgenciesLoaded = 0;
     $(DATA_SOURCES).each(function (i, agencySource) {
         $.getJSON(agencySource, function success(agency) {
@@ -21,6 +24,7 @@ angular.module('app').controller('AppCtrl', ['$scope', function($scope) {
         });
     });
 
+    // Display the Graph for a particular Route
     $scope.displayRoute = function (agencyName, routeId) {
         console.log("showing route " + routeId + " for agency " + agencyName);
         $("#graph").html(""); // clear the graph
