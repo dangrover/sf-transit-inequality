@@ -1,7 +1,7 @@
 angular.module('app', []);
 
 angular.module('app').constant('DATA_SOURCES',
-    ["data/BART.json", "data/CalTrain.json", "data/MUNI.json"]
+    ["data/MUNI.json", "data/BART.json", "data/CalTrain.json"]
 );
 
 angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function($scope, DATA_SOURCES) {
