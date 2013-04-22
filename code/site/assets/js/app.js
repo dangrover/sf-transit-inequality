@@ -31,11 +31,9 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
 
     // Display the Graph for a particular Route
     $scope.displayRoute = function (agencyName, routeId) {
-
         console.log("showing route " + routeId + " for agency " + agencyName);
-        //$("#graph").html(""); // clear the graph
 
-        // transform the data first
+        // grab our data
         var route = agencyData[agencyName].routes[routeId];
         var stops = [];
         $.each(route['stop_ids'], function(index, stopId) {
@@ -43,13 +41,13 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         });
 
         // dimensions
-        var w = 600,
+        var w = 550,
         h = 300,
         margin = 45,
         dotRadius = 5,
         moneyFormat = d3.format(",");
 
-        yScale = d3.scale.linear().domain([200000, 0]).range([margin, h - margin]);
+        yScale = d3.scale.linear().domain([200000, 0]).range([10, h - margin]);
         xScale = d3.scale.linear().domain([0, stops.length]).range([margin, w - margin]);
         xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(stops.length).tickFormat(function(d, i) {
             if (stops[i]) {
@@ -61,9 +59,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         });
 
         routeColor = agencyData[agencyName].routes[routeId].color;
-        if (routeColor === undefined) {
-            routeColor = "#000";
-        }
+        if (routeColor === undefined) routeColor = "#666";
 
         // Initial setup
         if(!$scope.didSetUpGraph){
@@ -72,7 +68,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
             graph_container.html(""); // Empty what was there initially
 
             // Heading
-            graph_container.append("h4");
+            graph_container.append("h3");
 
             // The main SVG where we draw stuff
             svg =  graph_container.append("svg:svg")
@@ -90,7 +86,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         }
 
         var svg = d3.select("#graph").selectAll("svg");
-        var heading = d3.select("#graph").selectAll("h4");
+        var heading = d3.select("#graph").selectAll("h3");
         var tooltip = d3.selectAll("div#tooltip");
         var data_path = d3.selectAll("path.data-line");
         var data_dots_group = d3.selectAll("g.data-dots");
@@ -110,7 +106,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
          .style("text-anchor", "end")
          .attr("dy", "-.5em")
          .attr('dx', "-1em")
-         .attr("transform", "rotate(-90)")
+         .attr("transform", "rotate(-80)")
          .call(xAxis);
 
         // Y axis elements
@@ -164,7 +160,6 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
             tooltip.style("visibility", "hidden");
             this.setAttribute("r", dotRadius);
         });
-
 
     };
 
