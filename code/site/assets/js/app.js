@@ -118,7 +118,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         .attr("class", "axis y-axis")
         .attr("transform", "translate(" + margin + ",0)")
         .call(yAxis);
-        
+
 
         // Data line
         var line = d3.svg.line()
@@ -139,11 +139,9 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         .attr("fill", routeColor)
         .attr("stroke", "white")
         .transition()
-        .attr("cx", function(d, i) {
-            return xScale(i);
-        }).attr("cy", function(d, i) {
-            return yScale(d.median_income);
-        }).attr("r", dotRadius)
+        .attr("cx", function(d, i) {return xScale(i);})
+        .attr("cy", function(d, i) {return yScale(d.median_income);})
+        .attr("r", dotRadius);
         
 
         data_dots_group.selectAll("circle").on("mouseover", function(d, i) {
@@ -157,10 +155,12 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
 
             tooltip.style("visibility", "visible");
             this.setAttribute("r", "10");
-        }).on("mousemove", function() {
+        })
+        .on("mousemove", function() {
             tooltip.style("top", (event.pageY - 10) + "px")
             .style("left", (event.pageX + 6) + "px");
-        }).on("mouseout", function() {
+        })
+        .on("mouseout", function() {
             tooltip.style("visibility", "hidden");
             this.setAttribute("r", dotRadius);
         });
