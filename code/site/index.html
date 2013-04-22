@@ -12,12 +12,12 @@
   <script src="./assets/libs/angular/angular.min.js"></script>
   <script src="./assets/js/app.js"></script>
 </head>
-
 <body>
-  <div class="container" data-ng-controller="AppCtrl">
+    <div class="top">
     <div class="row">
       <div class="span8">
         <h2>San Francisco Incomes by Mass Transit</h2>
+        <!--<p>an experiment by <a href="http://twitter.com/dangrover">@dangrover</a> and <a href="http://twitter.com/mikez">@mikez</a></p>-->
       </div>
       <div class="pull-right">
         <a href="https://twitter.com/share" class="twitter-share-button" data-via="DanGrover">Tweet</a>
@@ -56,14 +56,19 @@
     </iframe>
   </div>
 </div>
-<hr/>
+</div>
+
+
+  <div class="container" data-ng-controller="AppCtrl">
 <div class="row">
   <div class="span6" id="intro">
     <p>
-      The San Francisco Bay Area is home to extreme wealth and poverty. Inspired by
-      <a href="http://newyorker.com/sandbox/business/subway.html">a recent <i>New Yorker</i> feature</a>, 
-      we've mapped the area's transit stops to the median income in the areas
-      they serve.
+      <a href="http://newyorker.com/sandbox/business/subway.html">A recent feature in <i>The New Yorker</i></a> 
+      juxtaposed NYC's subways with residents' incomes.
+      Like New York, San Francisco is home to both extreme povery and wealth, often in close proximity. 
+    </p>
+    <p>
+      We pulled together schedules from all of the transit agencies serving the region and cross-linked it with data from the US Census Bureau. The juxtaposition highlights neatly the economic inequality in the Bay Area and its relationship with mass transit and urban form.
     </p>
   </div>
 </div>
