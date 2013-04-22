@@ -35,7 +35,8 @@
         "5239"
       ],
       "name": "J CHURCH",
-      "color": "#f8a637"
+      "color": "#f8a637",
+      "important": true
     },
     "1199": {
       "stop_ids": [
@@ -69,7 +70,8 @@
         "6992"
       ],
       "name": "M OCEAN VIEW",
-      "color": "#028753"
+      "color": "#028753",
+      "important": true
     },
     "8172": {
       "stop_ids": [
@@ -228,7 +230,8 @@
         "7219"
       ],
       "name": "N JUDAH",
-      "color": "#00529a"
+      "color": "#00529a",
+      "important": true
     },
     "8157": {
       "stop_ids": [
@@ -557,7 +560,8 @@
         "7395",
         "7396"
       ],
-      "name": "KT INGLESIDE/THIRD"
+      "name": "KT INGLESIDE/THIRD",
+      "important": true
     },
     "1110": {
       "stop_ids": [
@@ -676,18 +680,6 @@
       ],
       "name": "38 GEARY"
     },
-    "1197": {
-      "stop_ids": [
-        "7217",
-        "6994",
-        "6995",
-        "6997",
-        "6996",
-        "6998",
-        "6991"
-      ],
-      "name": "S CASTRO SHUTTLE"
-    },
     "1198": {
       "stop_ids": [
         "7217",
@@ -722,7 +714,8 @@
         "6932"
       ],
       "name": "L TARAVAL",
-      "color": "#92278f"
+      "color": "#92278f",
+      "important": true
     },
     "8184": {
       "stop_ids": [

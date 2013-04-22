@@ -36,16 +36,13 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         // transform the data first
         var stopIds = agencyData[agencyName].routes[routeId]['stop_ids'];
         var stops = [];
-        var incomes = [];
         $.each(stopIds, function(index, stopId) {
-            stopInfo = agencyData[agencyName].stops[stopId];
-            stops.push(stopInfo);
-            incomes.push(stopInfo.median_income);
+            stops.push(agencyData[agencyName].stops[stopId]);
         });
 
         // dimensions
         var w = 600,
-            h = 400,
+            h = 300,
             margin = 45,
             dotRadius = 8;
         yScale = d3.scale.linear().domain([200000, 0]).range([margin, h - margin]);
@@ -80,21 +77,23 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         var svg = d3.select("#graph")
             .append("svg:svg")
             .attr("width", w)
-            .attr("height", h + 90);
+            .attr("height", h + 140);
 
+        // Data line
         var line = d3.svg.line().interpolate("cardinal").x(function(d, i) {
             return xScale(i);
         }).y(function(d, i) {
-            return yScale(d);
+            return yScale(d.median_income);
         });
 
-        var path = svg.append("svg:path").attr("d", line(incomes)).attr("class", "data-line").attr("stroke", routeColor);
+        var path = svg.append("svg:path").attr("d", line(stops)).attr("class", "data-line").attr("stroke", routeColor);
 
+        // Dots for stops
 
-        var dots = svg.append("g").selectAll("circle").data(incomes).enter().append("circle").attr("cx", function(d, i) {
+        var dots = svg.append("g").selectAll("circle").data(stops).enter().append("circle").attr("cx", function(d, i) {
             return xScale(i);
         }).attr("cy", function(d, i) {
-            return yScale(d);
+            return yScale(d.median_income);
         }).attr("r", dotRadius).attr("fill-opacity", 0.3).on("mouseover", function(d, i) {
             tooltip.html(function() {
                 return "<strong>" + stops[i].name + "</strong><br/>" +
@@ -116,7 +115,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         });
 
 
-        //Create X axis
+        // X axis
         svg.append("g")
             .attr("class", "axis")
             .attr("transform", "translate(0," + (h - margin) + ")")
@@ -127,7 +126,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
             .attr('dx', "-1em")
             .attr("transform", "rotate(-90)");
 
-        //Create Y axis
+        // Y axis
         svg.append("g")
             .attr("class", "axis")
             .attr("transform", "translate(" + (margin) + ",0)")

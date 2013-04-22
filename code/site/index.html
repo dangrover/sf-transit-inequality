@@ -1,105 +1,162 @@
 <!DOCTYPE html>
 <html lang="en" data-ng-app="app">
-    
-    <head>
-        <meta charset="utf-8">
-        <title>Income vs. Transit Stops in the San Francisco Bay Area</title>
-        <link href="./assets/css/bootstrap.css" rel="stylesheet">
-        <link href="./assets/css/site.css" rel="stylesheet">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="./assets/libs/bootstrap/bootstrap.min.js"></script>
-        <script src="./assets/libs/d3/d3.min.js"></script>
-        <script src="./assets/libs/angular/angular.min.js"></script>
-        <script src="./assets/js/app.js"></script>
-    </head>
-    
-    <body>
-        <div class="container" data-ng-controller="AppCtrl">
-            <div class="row">
-                <div class="span8">
-                    <h3>Income vs. Transit Stops in San Francisco</h3>
-                </div>
-                <div class="pull-right">
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-via="DanGrover">Tweet</a>
-                    <script>
-                      !function(d, s, id) {
-                        var js, fjs = d.getElementsByTagName(s)[0],
-                          p = /^http:/.test(d.location) ? 'http' : 'https';
-                        if (!d.getElementById(id)) {
-                          js = d.createElement(s);
-                          js.id = id;
-                          js.src = p + '://platform.twitter.com/widgets.js';
-                          fjs.parentNode.insertBefore(js, fjs);
-                        }
-                      }(document, 'script', 'twitter-wjs');
-                    </script>
-                    <br/>
-                    <!-- facebook gizmo -->
-                    <div id="fb-root">
-                    </div>
-                    <script>
-                    (function(d, s, id) {
-                        var js, fjs = d.getElementsByTagName(s)[0];
-                        if (d.getElementById(id)) return;
-                        js = d.createElement(s);
-                        js.id = id;
-                        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=196057697206036";
-                        fjs.parentNode.insertBefore(js, fjs);
-                    }(document, 'script', 'facebook-jssdk'));
-                    </script>
-                    <div class="fb-like" data-send="false" data-layout="button_count" data-width="100"
-                    data-show-faces="false">
-                    </div>
-                    <br/>
-                    <iframe src="http://ghbtns.com/github-btn.html?user=dangrover&amp;repo=sf-transit-inequality&amp;type=watch&amp;count=true"
-                    allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20">
-                    </iframe>
-                </div>
-            </div>
-            <hr/>
-            <div class="row">
-                <div class="span6">
-                    <p>
-                        The San Francisco Bay Area is home to extreme wealth and poverty. Inspired by
-                        <a href="http://newyorker.com/sandbox/business/subway.html">a recent <i>New Yorker</i> feature</a>, 
-                        we've mapped the area's transit stops to the median income in the areas
-                        they serve.
-                    </p>
-                    </p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="span3">
-                    <dl id="choices">
-                      <div class="agency-container" data-ng-repeat="agency in agencies" data-ng-switch data-on="agency.name">
-                        <dt>{{agency.name}}</dt>
-                        <dd></dd>
-                        <div class="muni-routes" data-ng-switch-when="MUNI">
-                            <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1093')" style="background: #00529a">N</a></div>
-                            <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1198')" style="background: #92278f">L</a></div>
-                            <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1199')" style="background: #028753">M</a></div>
-                            <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1196')" style="background: #529cbb">K</a></div>
-                            <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1196')" style="background: #ed1c24">T</a></div>
-                            <div class="muni-line"><a href="#" data-ng-click="displayRoute(agency.name, '1094')" style="background: #f8a637">J</a></div>
-                            <small style="float:left; margin-top: 4px"><a href="#" data-ng-click="showMoreMuniClick()" data-ng-hide="showMoreMuni">(more)</a></small>
-                        </div>
-                        <ul class="agency-routes nav nav-tabs nav-stacked" data-ng-show="agency.name!='MUNI' || showMoreMuni">
-                              <li data-ng-repeat="(routeId, route) in agency.routes">
-                                <a href="#" data-ng-click="displayRoute(agency.name, routeId)"><span class="swatch" data-ng-style="{'background-color': route.color}"></span>{{route.name}}</a>
-                              </li>
-                        </ul>
-                      </div>
-                    </dl>
-                </div>
-                <div class="span7">
-                    <div id="graph">
-                        Tap a line on the left to get started.
-                    </div>
-                    
-                </div>
-            </div>
+
+<head>
+  <meta charset="utf-8">
+  <title>Income vs. Transit Stops in the San Francisco Bay Area</title>
+  <link href="./assets/css/bootstrap.css" rel="stylesheet">
+  <link href="./assets/css/site.css" rel="stylesheet">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="./assets/libs/bootstrap/bootstrap.min.js"></script>
+  <script src="./assets/libs/d3/d3.min.js"></script>
+  <script src="./assets/libs/angular/angular.min.js"></script>
+  <script src="./assets/js/app.js"></script>
+</head>
+
+<body>
+  <div class="container" data-ng-controller="AppCtrl">
+    <div class="row">
+      <div class="span8">
+        <h2>San Francisco Incomes by Mass Transit</h2>
+      </div>
+      <div class="pull-right">
+        <a href="https://twitter.com/share" class="twitter-share-button" data-via="DanGrover">Tweet</a>
+        <script>
+        !function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0],
+          p = /^http:/.test(d.location) ? 'http' : 'https';
+          if (!d.getElementById(id)) {
+            js = d.createElement(s);
+            js.id = id;
+            js.src = p + '://platform.twitter.com/widgets.js';
+            fjs.parentNode.insertBefore(js, fjs);
+          }
+        }(document, 'script', 'twitter-wjs');
+        </script>
+        <br/>
+        <!-- facebook gizmo -->
+        <div id="fb-root">
         </div>
-        <!-- /container -->
-    </body>
+        <script>
+        (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=196057697206036";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        </script>
+        <div class="fb-like" data-send="false" data-layout="button_count" data-width="100"
+        data-show-faces="false">
+      </div>
+      <br/>
+      <iframe src="http://ghbtns.com/github-btn.html?user=dangrover&amp;repo=sf-transit-inequality&amp;type=watch&amp;count=true"
+      allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20">
+    </iframe>
+  </div>
+</div>
+<hr/>
+<div class="row">
+  <div class="span6" id="intro">
+    <p>
+      The San Francisco Bay Area is home to extreme wealth and poverty. Inspired by
+      <a href="http://newyorker.com/sandbox/business/subway.html">a recent <i>New Yorker</i> feature</a>, 
+      we've mapped the area's transit stops to the median income in the areas
+      they serve.
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="span3">
+
+    <dl id="choices">
+      <!-- MUNI -->
+      <dt>MUNI</dt>
+      <div class="agency-container">
+       <div class="btn-group dropdown muni-routes">
+        <button class="btn btn-small muni-line">
+          <a href="#" data-ng-click="displayRoute('MUNI', '1093')" style="background: #00529a">N</a>
+        </button>
+        <button class="btn btn-small muni-line">
+          <a href="#" data-ng-click="displayRoute('MUNI', '1198')" style="background: #92278f">L</a>
+        </button>
+        <button class="btn btn-small muni-line">
+          <a href="#" data-ng-click="displayRoute('MUNI', '1199')" style="background: #028753">M</a>
+        </button>
+        <button class="btn btn-small muni-line">
+          <a href="#" data-ng-click="displayRoute('MUNI', '1196')" style="background: #529cbb">K</a>
+        </button>
+        <button class="btn btn-small muni-line">
+          <a href="#" data-ng-click="displayRoute('MUNI', '1196')" style="background: #ed1c24">T</a>
+        </button>
+        <button class="btn btn-small muni-line">
+          <a href="#" data-ng-click="displayRoute('MUNI', '1094')" style="background: #f8a637">J</a>
+        </button>
+        <a class="dropdown-toggle btn btn-small" id="muni-more" role="button" data-toggle="dropdown" data-target="#" href="#">
+          More <b class="caret"></b>
+
+        </a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="muni-more">
+         <li data-ng-repeat="(routeId, route) in agencies['MUNI'].routes">
+          <a href="#" data-ng-click="displayRoute('MUNI', routeId)" data-ng-hide="route.important">
+            {{route.name}}
+          </a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+  <br/>
+
+  <!-- CalTrain -->
+<dt>CalTrain</dt>
+<div class="agency-container">
+  <div class="btn-group caltrain-routes">
+    <button class="btn btn-small">
+      <a href="#" data-ng-click="displayRoute('CalTrain', 'ct_local_20121001')">Local</a>
+    </button>
+    <button class="btn btn-small">
+      <a href="#" data-ng-click="displayRoute('CalTrain', 'ct_limited_20121001')">Limited</a>
+    </button>
+    <button class="btn btn-small">
+      <a href="#" data-ng-click="displayRoute('CalTrain', 'ct_bullet_20121001')">Bullet</a>
+    </button>
+  </div>
+</div>
+
+</br>
+
+  <!-- BART -->
+  <dt>BART</dt>
+  <div class="agency-container">
+   <ul class="agency-routes nav nav-tabs nav-stacked">
+    <li data-ng-repeat="(routeId, route) in agencies['BART'].routes">
+      <a href="#" data-ng-click="displayRoute('BART', routeId)">
+        <span class="swatch" data-ng-style="{'background-color': route.color}"></span>
+        {{route.name}}
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+
+</div>
+
+
+
+
+<div class="span7">
+  <div id="graph">
+    Tap a line on the left to get started.
+  </div>
+
+</div>
+</div>
+</div>
+<!-- /container -->
+</body>
 
 </html>
