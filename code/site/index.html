@@ -76,7 +76,10 @@
       <div class="agency-container">
        <div class="btn-group dropdown muni-routes">
         <button class="btn btn-small muni-line">
-          <a href="#" data-ng-click="displayRoute('MUNI', '1093')" style="background: #00529a">N</a>
+          <a href="#" data-ng-click="displayRoute('MUNI', '1094')" style="background: #f8a637">J</a>
+        </button>
+        <button class="btn btn-small muni-line">
+          <a href="#" data-ng-click="displayRoute('MUNI', '1196')" style="background: #529cbb">K</a>
         </button>
         <button class="btn btn-small muni-line">
           <a href="#" data-ng-click="displayRoute('MUNI', '1198')" style="background: #92278f">L</a>
@@ -85,60 +88,60 @@
           <a href="#" data-ng-click="displayRoute('MUNI', '1199')" style="background: #028753">M</a>
         </button>
         <button class="btn btn-small muni-line">
-          <a href="#" data-ng-click="displayRoute('MUNI', '1196')" style="background: #529cbb">K</a>
+          <a href="#" data-ng-click="displayRoute('MUNI', '1093')" style="background: #00529a">N</a>
         </button>
         <button class="btn btn-small muni-line">
           <a href="#" data-ng-click="displayRoute('MUNI', '1196')" style="background: #ed1c24">T</a>
         </button>
-        <button class="btn btn-small muni-line">
-          <a href="#" data-ng-click="displayRoute('MUNI', '1094')" style="background: #f8a637">J</a>
-        </button>
+        
+        <!-- Busses 'n' stuff -->
         <a class="dropdown-toggle btn btn-small" id="muni-more" role="button" data-toggle="dropdown" data-target="#" href="#">
           More <b class="caret"></b>
-
         </a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="muni-more">
-         <li data-ng-repeat="(routeId, route) in agencies['MUNI'].routes">
+         <li data-ng-repeat="(routeId, route) in (agencies['MUNI'].routes | orderBy:'name')">
           <a href="#" data-ng-click="displayRoute('MUNI', routeId)" data-ng-hide="route.important">
             {{route.name}}
           </a>
         </li>
       </ul>
-
     </div>
   </div>
 
   <br/>
 
   <!-- CalTrain -->
-<dt>CalTrain</dt>
-<div class="agency-container">
-  <div class="btn-group caltrain-routes">
-    <button class="btn btn-small">
-      <a href="#" data-ng-click="displayRoute('CalTrain', 'ct_local_20121001')">Local</a>
-    </button>
-    <button class="btn btn-small">
-      <a href="#" data-ng-click="displayRoute('CalTrain', 'ct_limited_20121001')">Limited</a>
-    </button>
-    <button class="btn btn-small">
-      <a href="#" data-ng-click="displayRoute('CalTrain', 'ct_bullet_20121001')">Bullet</a>
-    </button>
+  <dt>CalTrain</dt>
+  <div class="agency-container">
+    <div class="btn-group caltrain-routes">
+      <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_local_20121001')">
+        <span class="swatch" style="background-color: white"></span>
+        Local
+      </a>
+      <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_limited_20121001')">
+        <span class="swatch" style="background-color: yellow"></span>
+        Limited
+      </a>
+      <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_bullet_20121001')">
+        <span class="swatch" style="background-color: red"></span>
+        Bullet
+      </a>
+    </div>
   </div>
-</div>
 
 </br>
 
-  <!-- BART -->
-  <dt>BART</dt>
-  <div class="agency-container">
-   <ul class="agency-routes nav nav-tabs nav-stacked">
-    <li data-ng-repeat="(routeId, route) in agencies['BART'].routes">
-      <a href="#" data-ng-click="displayRoute('BART', routeId)">
-        <span class="swatch" data-ng-style="{'background-color': route.color}"></span>
-        {{route.name}}
-      </a>
-    </li>
-  </ul>
+<!-- BART -->
+<dt>BART</dt>
+<div class="agency-container">
+ <ul class="agency-routes nav nav-tabs nav-stacked">
+  <li data-ng-repeat="(routeId, route) in agencies['BART'].routes">
+    <a href="#" data-ng-click="displayRoute('BART', routeId)">
+      <span class="swatch" data-ng-style="{'background-color': route.color}"></span>
+      {{route.name}}
+    </a>
+  </li>
+</ul>
 </div>
 
 
