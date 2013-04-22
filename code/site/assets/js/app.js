@@ -41,10 +41,14 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
 
         // grab our data
         var route = agencyData[agencyName].routes[routeId];
-        var stops = [];
+        var stops = []; // TODO use map()
         $.each(route['stop_ids'], function(index, stopId) {
             stops.push(agencyData[agencyName].stops[stopId]);
         });
+
+
+        routeColor = agencyData[agencyName].routes[routeId].color;
+        if (routeColor === undefined) routeColor = "#666";
 
         // dimensions
         var w = 550,
@@ -52,10 +56,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         margin = 45,
         dotRadius = 5,
         moneyFormat = d3.format(",");
-
-        mapProjection = d3.geo.albers().parallels([37.69,37.77]).scale(23000).translate([8000,1000]);
-
-
+        mapProjection = d3.geo.albers().parallels([37.69,37.77]).scale(23000).translate([8000,980]);
         yScale = d3.scale.linear().domain([200000, 0]).range([10, h - margin]);
         xScale = d3.scale.linear().domain([0, stops.length]).range([margin, w - margin]);
         xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(stops.length).tickFormat(function(d, i) {
@@ -63,12 +64,8 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
                 return stops[i].name;
             }
         });
-        yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(8).tickFormat(function(d, i) {
-            return "$" + d / 1000 + "K";
-        });
+        yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(8).tickFormat(function(d, i) {return "$" + d / 1000 + "K";});
 
-        routeColor = agencyData[agencyName].routes[routeId].color;
-        if (routeColor === undefined) routeColor = "#666";
 
         // Initial setup
         if(!$scope.didSetUpGraph){
@@ -98,7 +95,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
             // Show the map of CA
             map_svg.append("path")
             .attr("class","landmass")
-            .attr("fill", "#ddd")
+            .attr("fill", "#e5e5e5")
             .datum(topojson.feature($scope.map_data, $scope.map_data.objects.ca))
             .attr("d", d3.geo.path().projection(mapProjection));
 
@@ -166,16 +163,28 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         
 
         data_dots_group.selectAll("circle").on("mouseover", function(d, i) {
+            stop = stops[i];
             tooltip.html(function() {
                 return "<strong>" + stops[i].name + "</strong><br/>" +
-                "Median income: $" + moneyFormat(stops[i].median_income) + "<br/>" +
-                "Census Tract: " + stops[i].state_fips + stops[i].county_fips + stops[i].tract_fips;
+                "Median income: $" + moneyFormat(stop.median_income) + "<br/>" +
+                "Census Tract: " + stop.state_fips + stop.county_fips + stop.tract_fips;
             })
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY) + "px");
 
             tooltip.style("visibility", "visible");
-            this.setAttribute("r", "10");
+            this.setAttribute("r", 10);
+
+            // show a map marker
+            marker_coords = mapProjection([stop.lon, stop.lat]);
+            map_svg.select("circle.stop-marker").remove();
+            circle = map_svg.append("circle")
+            .attr("class", "stop-marker")
+            .attr("r",4)
+            .attr("fill",routeColor)
+            .attr("stroke", "black")
+            .attr("cx",marker_coords[0])
+            .attr("cy",marker_coords[1]);
         })
         .on("mousemove", function() {
             tooltip.style("top", (event.pageY - 10) + "px")
@@ -184,16 +193,16 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         .on("mouseout", function() {
             tooltip.style("visibility", "hidden");
             this.setAttribute("r", dotRadius);
+            map_svg.select("circle.stop-marker").remove();
         });
 
-
-
-        // update the map
+        // Update the map to show this route
         var route_line = d3.svg.line().x(function(d){return d[0];}).y(function(d){return d[1];});
 
-        positions = [];
+        positions = []; // TODO use map
         $(stops).each(function(index, stop){positions.push(mapProjection([stop.lon, stop.lat]));});
-        var map_route_path = map_svg.select("path.route-line");
+
+        map_route_path = map_svg.select("path.route-line");
         map_route_path.transition().attr("d", route_line(positions)).attr("stroke", routeColor);
 
         console.log("line pos = %o",positions);
