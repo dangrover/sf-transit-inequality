@@ -8,9 +8,11 @@
   <link href="./assets/css/site.css" rel="stylesheet">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="./assets/libs/bootstrap/bootstrap.min.js"></script>
-  <script src="./assets/libs/d3/d3.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
   <script src="./assets/libs/angular/angular.min.js"></script>
   <script src="./assets/js/app.js"></script>
+
 </head>
 <body>
   <div class="top">
@@ -67,7 +69,7 @@
         juxtaposed New York City's subway stops with their residents' incomes. We were inspired and wondered how those graphs would look in our neck of the woods. Like NYC, San Francisco has people of <a href="http://www.sfgate.com/realestate/article/RICH-CITY-POOR-CITY-Middle-class-neighborhoods-2494307.php">both extreme povery and wealth</a>, often living toe-to-toe. 
       </p>
       <p>
-        We linked census data with route maps of our region's eclectic mishmash of transit systems. The result is a revealing cross-section of the Bay Area's growing economic inequality and its relationship with mass transit and urban form.
+        We linked census data with route maps of our region's eclectic mishmash of transit systems. The resulting cross-section reveals the Bay Area's growing economic inequality and its relationship with mass transit and urban form.
       </p>
     </div>
   </div>
@@ -156,9 +158,18 @@
 
 
 <div class="span6">
-  <div id="graph">
-    <div id="instructions"><p>&larr; Tap a line to get started!</p></div>
-  </div>
+
+ <div id="map">
+  <div class="bottom-gradient"></div>
+  <svg width="100%" height="400"></svg>
+
+ </div>
+
+ <div id="graph">
+  <div id="instructions"><p>&larr; Tap a line to get started!</p></div>
+</div>
+
+
 
 </div>
 </div>

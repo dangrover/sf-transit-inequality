@@ -24,6 +24,12 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         });
     });
 
+    // Load the map of CA
+    $.getJSON("data/ca-topo.json", function success(ca_topojson){
+        console.log("loaded CA successfully");
+        $scope.map_data = ca_topojson;
+    });
+
     // Show more Muni
     $scope.showMoreMuniClick = function () {
         $scope.showMoreMuni = true;
@@ -46,6 +52,9 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         margin = 45,
         dotRadius = 5,
         moneyFormat = d3.format(",");
+
+        mapProjection = d3.geo.albers().parallels([37.69,37.77]).scale(23000).translate([8000,1000]);
+
 
         yScale = d3.scale.linear().domain([200000, 0]).range([10, h - margin]);
         xScale = d3.scale.linear().domain([0, stops.length]).range([margin, w - margin]);
@@ -82,6 +91,20 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
             svg.append("svg:path").attr("class", "data-line");
             svg.append("g").attr("class","data-dots");
 
+            // Set up the map
+            map_svg = d3.select("#map svg");
+            
+
+            // Show the map of CA
+            map_svg.append("path")
+            .attr("class","landmass")
+            .attr("fill", "#ddd")
+            .datum(topojson.feature($scope.map_data, $scope.map_data.objects.ca))
+            .attr("d", d3.geo.path().projection(mapProjection));
+
+            // Route line
+            map_svg.append("path").attr("class", "route-line");
+
             $scope.didSetUpGraph = true;
         }
 
@@ -90,7 +113,9 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         var tooltip = d3.selectAll("div#tooltip");
         var data_path = d3.selectAll("path.data-line");
         var data_dots_group = d3.selectAll("g.data-dots");
+        var map_svg = d3.select("#map svg");
         
+
         // Heading
         heading.html(agencyName+" <small>"+route.name+"</small>");
 
@@ -161,6 +186,17 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
             this.setAttribute("r", dotRadius);
         });
 
-    };
 
-}]);
+
+        // update the map
+        var route_line = d3.svg.line().x(function(d){return d[0];}).y(function(d){return d[1];});
+
+        positions = [];
+        $(stops).each(function(index, stop){positions.push(mapProjection([stop.lon, stop.lat]));});
+        var map_route_path = map_svg.select("path.route-line");
+        map_route_path.transition().attr("d", route_line(positions)).attr("stroke", routeColor);
+
+        console.log("line pos = %o",positions);
+        };
+
+    }]);
