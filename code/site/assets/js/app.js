@@ -2,7 +2,7 @@ angular.module('app', []);
 
 angular.module('app').constant('DATA_SOURCES',
     ["data/MUNI.json", "data/BART.json", "data/CalTrain.json"]
-);
+    );
 
 angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function($scope, DATA_SOURCES) {
 
@@ -44,10 +44,10 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
 
         // dimensions
         var w = 600,
-            h = 300,
-            margin = 45,
-            dotRadius = 5,
-            moneyFormat = d3.format(",");
+        h = 300,
+        margin = 45,
+        dotRadius = 5,
+        moneyFormat = d3.format(",");
 
         yScale = d3.scale.linear().domain([200000, 0]).range([margin, h - margin]);
         xScale = d3.scale.linear().domain([0, stops.length]).range([margin, w - margin]);
@@ -67,43 +67,31 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
 
         // Initial setup
         if(!$scope.didSetUpGraph){
-
             graph_container = d3.select("#graph");
 
-            // Empty what was there initially
-            graph_container.html("");
+            graph_container.html(""); // Empty what was there initially
 
             // Heading
             graph_container.append("h4");
 
+            // The main SVG where we draw stuff
             svg =  graph_container.append("svg:svg")
-                .attr("width", w)
-                .attr("height", h + 140);
+            .attr("width", w)
+            .attr("height", h + 140);
 
-            graph_container.append("div")
-                .attr("class","tooltip")
-                .style("visibility", "hidden")
-                .style("z-index", "10")
-                .style("position", "absolute")
-                .style("background", "white")
-                .style("border", "#ccc 1px solid")
-                .style("border-radius", "4px")
-                .style("padding", "4px")
-                .style("font-size", "11px")
-                .style("box-shadow", "0px 2px 3px rgba(0,0,0,0.5)");
+            // Tooltip
+            graph_container.append("div").attr("id","tooltip");
 
-            // Data line
-             svg.append("svg:path").attr("class", "data-line");
+            // Data line and dots
+            svg.append("svg:path").attr("class", "data-line");
+            svg.append("g").attr("class","data-dots");
 
-             // Data dots
-             svg.append("g").attr("class","data-dots");
-
-             $scope.didSetUpGraph = true;
+            $scope.didSetUpGraph = true;
         }
 
         var svg = d3.select("#graph").selectAll("svg");
         var heading = d3.select("#graph").selectAll("h4");
-        var tooltip = d3.selectAll("div.tooltip");
+        var tooltip = d3.selectAll("div#tooltip");
         var data_path = d3.selectAll("path.data-line");
         var data_dots_group = d3.selectAll("g.data-dots");
         
@@ -114,23 +102,23 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         svg.selectAll("g.axis").remove();
 
          // X axis elements
-        svg.append("g")
-            .attr("class", "axis x-axis")
-            .attr("transform", "translate(0," + (h - margin) + ")")
-            .call(xAxis)
-            .selectAll("text")
-            .style("text-anchor", "end")
-            .attr("dy", "-.5em")
-            .attr('dx', "-1em")
-            .attr("transform", "rotate(-90)")
-            .call(xAxis);
+         svg.append("g")
+         .attr("class", "axis x-axis")
+         .attr("transform", "translate(0," + (h - margin) + ")")
+         .call(xAxis)
+         .selectAll("text")
+         .style("text-anchor", "end")
+         .attr("dy", "-.5em")
+         .attr('dx', "-1em")
+         .attr("transform", "rotate(-90)")
+         .call(xAxis);
 
         // Y axis elements
         svg.append("g")
-            .attr("class", "axis y-axis")
-            .attr("transform", "translate(" + margin + ",0)")
-            .call(yAxis);
-               
+        .attr("class", "axis y-axis")
+        .attr("transform", "translate(" + margin + ",0)")
+        .call(yAxis);
+        
 
         // Data line
         var line = d3.svg.line()
@@ -161,8 +149,8 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         data_dots_group.selectAll("circle").on("mouseover", function(d, i) {
             tooltip.html(function() {
                 return "<strong>" + stops[i].name + "</strong><br/>" +
-                    "Median income: $" + moneyFormat(stops[i].median_income) + "<br/>" +
-                    "Census Tract: " + stops[i].state_fips + stops[i].county_fips + stops[i].tract_fips;
+                "Median income: $" + moneyFormat(stops[i].median_income) + "<br/>" +
+                "Census Tract: " + stops[i].state_fips + stops[i].county_fips + stops[i].tract_fips;
             })
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY) + "px");
@@ -170,9 +158,8 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
             tooltip.style("visibility", "visible");
             this.setAttribute("r", "10");
         }).on("mousemove", function() {
-            tooltip
-                .style("top", (event.pageY - 10) + "px")
-                .style("left", (event.pageX + 6) + "px");
+            tooltip.style("top", (event.pageY - 10) + "px")
+            .style("left", (event.pageX + 6) + "px");
         }).on("mouseout", function() {
             tooltip.style("visibility", "hidden");
             this.setAttribute("r", dotRadius);
