@@ -13,10 +13,10 @@
   <script src="./assets/js/app.js"></script>
 </head>
 <body>
-    <div class="top">
+  <div class="top">
     <div class="row">
       <div class="span8">
-        <h2>San Francisco Incomes by Mass Transit</h2>
+        <h2>Inequality &amp; Mass Transit in the Bay Area</h2>
         <!--<p>an experiment by <a href="http://twitter.com/dangrover">@dangrover</a> and <a href="http://twitter.com/mikez">@mikez</a></p>-->
       </div>
       <div class="pull-right">
@@ -59,94 +59,93 @@
 </div>
 
 
-  <div class="container" data-ng-controller="AppCtrl">
-<div class="row">
-  <div class="span6" id="intro">
-    <p>
-      <a href="http://newyorker.com/sandbox/business/subway.html">A recent feature in <i>The New Yorker</i></a> 
-      juxtaposed NYC's subways with residents' incomes.
-      Like New York, San Francisco is home to both extreme povery and wealth, often in close proximity. 
-    </p>
-    <p>
-      We pulled together schedules from all of the transit agencies serving the region and cross-linked it with data from the US Census Bureau. The juxtaposition highlights neatly the economic inequality in the Bay Area and its relationship with mass transit and urban form.
-    </p>
+<div class="container" data-ng-controller="AppCtrl">
+  <div class="row">
+    <div class="span6" id="intro">
+      <p>
+        <a href="http://newyorker.com/sandbox/business/subway.html">A recent feature in <i>The New Yorker</i></a>  
+        juxtaposed New York City's subways with its residents' incomes. We were inspired and wondered how those graphs would look in our neck of the woods. Like NYC, San Francisco is <a href="http://www.sfgate.com/realestate/article/RICH-CITY-POOR-CITY-Middle-class-neighborhoods-2494307.php">home to both extreme povery and wealth</a>, often toe-to-toe.
+      </p>
+      <p>
+        We linked census data with route maps from our region's eclectic mishmash of transit systems. The result is a revealing cross-section of the Bay Area's growing economic inequality and its relationship with mass transit and urban form.
+      </p>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="span3">
+  <div class="row">
+    <div class="span3">
 
-    <dl id="choices">
-      <!-- MUNI -->
-      <dt>MUNI</dt>
-      <div class="agency-container">
-       <div class="btn-group dropdown muni-routes">
-        <button class="btn btn-small muni-line">
-          <a href="#" data-ng-click="displayRoute('MUNI', '1094')" style="background: #f8a637">J</a>
-        </button>
-        <button class="btn btn-small muni-line">
-          <a href="#" data-ng-click="displayRoute('MUNI', '1196')" style="background: #529cbb">K</a>
-        </button>
-        <button class="btn btn-small muni-line">
-          <a href="#" data-ng-click="displayRoute('MUNI', '1198')" style="background: #92278f">L</a>
-        </button>
-        <button class="btn btn-small muni-line">
-          <a href="#" data-ng-click="displayRoute('MUNI', '1199')" style="background: #028753">M</a>
-        </button>
-        <button class="btn btn-small muni-line">
-          <a href="#" data-ng-click="displayRoute('MUNI', '1093')" style="background: #00529a">N</a>
-        </button>
-        <button class="btn btn-small muni-line">
-          <a href="#" data-ng-click="displayRoute('MUNI', '1196')" style="background: #ed1c24">T</a>
-        </button>
-        
-        <!-- Busses 'n' stuff -->
-        <a class="dropdown-toggle btn btn-small" id="muni-more" role="button" data-toggle="dropdown" data-target="#" href="#">
-          More <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="muni-more">
-         <li data-ng-repeat="(routeId, route) in (agencies['MUNI'].routes | orderBy:'name')">
-          <a href="#" data-ng-click="displayRoute('MUNI', routeId)" data-ng-hide="route.important">
-            {{route.name}}
+      <dl id="choices">
+        <!-- MUNI -->
+        <dt>MUNI</dt>
+        <div class="agency-container">
+         <div class="btn-group dropdown muni-routes">
+          <button class="btn btn-small muni-line">
+            <a href="#" data-ng-click="displayRoute('MUNI', '1094')" style="background: #f8a637">J</a>
+          </button>
+          <button class="btn btn-small muni-line">
+            <a href="#" data-ng-click="displayRoute('MUNI', '1196')" style="background: #529cbb">K</a>
+          </button>
+          <button class="btn btn-small muni-line">
+            <a href="#" data-ng-click="displayRoute('MUNI', '1198')" style="background: #92278f">L</a>
+          </button>
+          <button class="btn btn-small muni-line">
+            <a href="#" data-ng-click="displayRoute('MUNI', '1199')" style="background: #028753">M</a>
+          </button>
+          <button class="btn btn-small muni-line">
+            <a href="#" data-ng-click="displayRoute('MUNI', '1093')" style="background: #00529a">N</a>
+          </button>
+          <button class="btn btn-small muni-line">
+            <a href="#" data-ng-click="displayRoute('MUNI', '1196')" style="background: #ed1c24">T</a>
+          </button>
+
+          <!-- Busses 'n' stuff -->
+          <a class="dropdown-toggle btn btn-small" id="muni-more" role="button" data-toggle="dropdown" data-target="#" href="#">
+            More <b class="caret"></b>
           </a>
-        </li>
-      </ul>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="muni-more">
+           <li data-ng-repeat="(routeId, route) in (agencies['MUNI'].routes | orderBy:'name')">
+            <a href="#" data-ng-click="displayRoute('MUNI', routeId)" data-ng-hide="route.important">
+              {{route.name}}
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
 
-  <br/>
+    <br/>
 
-  <!-- CalTrain -->
-  <dt>CalTrain</dt>
+    <!-- CalTrain -->
+    <dt>CalTrain</dt>
+    <div class="agency-container">
+      <div class="btn-group caltrain-routes">
+        <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_local_20121001')">
+          <span class="swatch" style="background-color: white"></span>
+          Local
+        </a>
+        <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_limited_20121001')">
+          <span class="swatch" style="background-color: yellow"></span>
+          Limited
+        </a>
+        <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_bullet_20121001')">
+          <span class="swatch" style="background-color: red"></span>
+          Bullet
+        </a>
+      </div>
+    </div>
+
+  </br>
+
+  <!-- BART -->
+  <dt>BART</dt>
   <div class="agency-container">
-    <div class="btn-group caltrain-routes">
-      <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_local_20121001')">
-        <span class="swatch" style="background-color: white"></span>
-        Local
+   <ul class="agency-routes nav nav-tabs nav-stacked">
+    <li data-ng-repeat="(routeId, route) in agencies['BART'].routes">
+      <a href="#" data-ng-click="displayRoute('BART', routeId)">
+        <span class="swatch" data-ng-style="{'background-color': route.color}"></span>
+        {{route.name}}
       </a>
-      <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_limited_20121001')">
-        <span class="swatch" style="background-color: yellow"></span>
-        Limited
-      </a>
-      <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_bullet_20121001')">
-        <span class="swatch" style="background-color: red"></span>
-        Bullet
-      </a>
-    </div>
-  </div>
-
-</br>
-
-<!-- BART -->
-<dt>BART</dt>
-<div class="agency-container">
- <ul class="agency-routes nav nav-tabs nav-stacked">
-  <li data-ng-repeat="(routeId, route) in agencies['BART'].routes">
-    <a href="#" data-ng-click="displayRoute('BART', routeId)">
-      <span class="swatch" data-ng-style="{'background-color': route.color}"></span>
-      {{route.name}}
-    </a>
-  </li>
-</ul>
+    </li>
+  </ul>
 </div>
 
 
