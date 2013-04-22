@@ -31,8 +31,9 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
 
     // Display the Graph for a particular Route
     $scope.displayRoute = function (agencyName, routeId) {
+
         console.log("showing route " + routeId + " for agency " + agencyName);
-        $("#graph").html(""); // clear the graph
+        //$("#graph").html(""); // clear the graph
 
         // transform the data first
         var route = agencyData[agencyName].routes[routeId];
@@ -45,7 +46,9 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         var w = 600,
             h = 300,
             margin = 45,
-            dotRadius = 5;
+            dotRadius = 5,
+            moneyFormat = d3.format(",");
+
         yScale = d3.scale.linear().domain([200000, 0]).range([margin, h - margin]);
         xScale = d3.scale.linear().domain([0, stops.length]).range([margin, w - margin]);
         xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(stops.length).tickFormat(function(d, i) {
@@ -57,71 +60,105 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
             return "$" + d / 1000 + "K";
         });
 
-        moneyFormat = d3.format(",");
         routeColor = agencyData[agencyName].routes[routeId].color;
         if (routeColor === undefined) {
             routeColor = "#000";
         }
 
-        var tooltip = d3.select("#graph")
-            .append("div")
-            .style("visibility", "hidden")
-            .style("z-index", "10")
-            .style("position", "absolute")
-            .style("background", "white")
-            .style("border", "#ccc 1px solid")
-            .style("border-radius", "4px")
-            .style("padding", "4px")
-            .style("font-size", "11px")
-            .style("box-shadow", "0px 2px 3px rgba(0,0,0,0.5)");
+        // Initial setup
+        if(!$scope.didSetUpGraph){
 
-        var heading = d3.select("#graph")
-            .append("h4")
-            .html(agencyName+" <small>"+route.name+"</small>");
+            graph_container = d3.select("#graph");
 
-        var svg = d3.select("#graph")
-            .append("svg:svg")
-            .attr("width", w)
-            .attr("height", h + 140);
+            // Empty what was there initially
+            graph_container.html("");
 
+            // Heading
+            graph_container.append("h4");
 
-        // X axis
+            svg =  graph_container.append("svg:svg")
+                .attr("width", w)
+                .attr("height", h + 140);
+
+            graph_container.append("div")
+                .attr("class","tooltip")
+                .style("visibility", "hidden")
+                .style("z-index", "10")
+                .style("position", "absolute")
+                .style("background", "white")
+                .style("border", "#ccc 1px solid")
+                .style("border-radius", "4px")
+                .style("padding", "4px")
+                .style("font-size", "11px")
+                .style("box-shadow", "0px 2px 3px rgba(0,0,0,0.5)");
+
+            // Data line
+             svg.append("svg:path").attr("class", "data-line");
+
+             // Data dots
+             svg.append("g").attr("class","data-dots");
+
+             $scope.didSetUpGraph = true;
+        }
+
+        var svg = d3.select("#graph").selectAll("svg");
+        var heading = d3.select("#graph").selectAll("h4");
+        var tooltip = d3.selectAll("div.tooltip");
+        var data_path = d3.selectAll("path.data-line");
+        var data_dots_group = d3.selectAll("g.data-dots");
+        
+        // Heading
+        heading.html(agencyName+" <small>"+route.name+"</small>");
+
+        // Axes
+        svg.selectAll("g.axis").remove();
+
+         // X axis elements
         svg.append("g")
-            .attr("class", "axis")
+            .attr("class", "axis x-axis")
             .attr("transform", "translate(0," + (h - margin) + ")")
             .call(xAxis)
             .selectAll("text")
             .style("text-anchor", "end")
             .attr("dy", "-.5em")
             .attr('dx', "-1em")
-            .attr("transform", "rotate(-90)");
+            .attr("transform", "rotate(-90)")
+            .call(xAxis);
 
-        // Y axis
+        // Y axis elements
         svg.append("g")
-            .attr("class", "axis")
-            .attr("transform", "translate(" + (margin) + ",0)")
+            .attr("class", "axis y-axis")
+            .attr("transform", "translate(" + margin + ",0)")
             .call(yAxis);
-            
+               
 
         // Data line
-        var line = d3.svg.line().interpolate("cardinal").x(function(d, i) {
-            return xScale(i);
-        }).y(function(d, i) {
-            return yScale(d.median_income);
-        });
+        var line = d3.svg.line()
+        .interpolate("cardinal")
+        .x(function(d, i) { return xScale(i);})
+        .y(function(d, i) { return yScale(d.median_income);});
 
-        var path = svg.append("svg:path").attr("d", line(stops)).attr("class", "data-line").attr("stroke", routeColor);
+        data_path.transition()
+        .attr("d",line(stops))
+        .attr("stroke", routeColor);
 
         // Dots for stops
-        var dots = svg.append("g").selectAll("circle").data(stops).enter().append("circle")
+        data_dots_group.selectAll("circle").remove();
+        new_dots = data_dots_group.selectAll("circle")
+        .data(stops)
+        .enter()
+        .append("circle")
+        .attr("fill", routeColor)
+        .attr("stroke", "white")
+        .transition()
         .attr("cx", function(d, i) {
             return xScale(i);
         }).attr("cy", function(d, i) {
             return yScale(d.median_income);
         }).attr("r", dotRadius)
-        .attr("fill", routeColor)
-        .attr("stroke", "white")
-        .on("mouseover", function(d, i) {
+        
+
+        data_dots_group.selectAll("circle").on("mouseover", function(d, i) {
             tooltip.html(function() {
                 return "<strong>" + stops[i].name + "</strong><br/>" +
                     "Median income: $" + moneyFormat(stops[i].median_income) + "<br/>" +
