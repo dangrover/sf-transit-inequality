@@ -9,14 +9,13 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
     // Load the data for each agency
     var agencyData = {};
     var numberAgenciesLoaded = 0;
-    $(DATA_SOURCES).each(function (i, agencySource) {
-        $.getJSON(agencySource, function success(agency) {
+    DATA_SOURCES.forEach(function (agencySource, i) {
+        d3.json(agencySource, function(error, agency) {
             var agencyName = agency['agency_name'];
             agencyData[agencyName] = agency;
             // TODO(@dan): rename agency_name in source to just 'name'??
             agencyData[agencyName].name = agencyName;
             numberAgenciesLoaded += 1;
-            console.log("Loaded %o", agencyData);
             if (numberAgenciesLoaded === DATA_SOURCES.length) {
                 $scope.agencies = agencyData;
                 $scope.$apply();
@@ -25,35 +24,34 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
     });
 
     // Load and show the map of CA
-    $.getJSON("data/ca-topo.json", function success(ca_topojson){
-        console.log("loaded CA successfully");
+    d3.json("data/ca-topo.json", function (error, ca_topojson){
         map_data = ca_topojson;
         
-        map_svg = d3.select("#map svg");
         $scope.map_projection = d3.geo.albers().parallels([37.69,37.77]).scale(23000).translate([8000,1020]);
 
+        // Draw the coastline of the bay area
+        map_svg = d3.select("#map svg");
         map_svg.append("path")
         .attr("class","landmass")
         .datum(topojson.feature(map_data, map_data.objects.ca))
         .attr("d", d3.geo.path().projection($scope.map_projection));
-
-        // Path showing the route of the line we're on
-        map_svg.append("path").attr("class", "route-line");
+        
+        // Path that will show the route of the line we're looking at:
+        map_svg.append("path").attr("class", "route-line"); 
     });
 
 
     // Display the Graph for a particular Route
-    $scope.displayRoute = function (agencyName, routeId) {
+    $scope.displayRoute = function (agencyName, routeId, colorOverride) {
         console.log("showing route " + routeId + " for agency " + agencyName);
 
         // grab our data
         var route = agencyData[agencyName].routes[routeId];
-        var stops = []; // TODO use map()
-        $.each(route['stop_ids'], function(index, stopId) {
-            stops.push(agencyData[agencyName].stops[stopId]);
+        var stops = route['stop_ids'].map(function(stop_id){
+            return agencyData[agencyName].stops[stop_id];
         });
 
-        routeColor = agencyData[agencyName].routes[routeId].color;
+        routeColor = colorOverride ? colorOverride : agencyData[agencyName].routes[routeId].color;
         if (routeColor === undefined) routeColor = "#666";
 
         // dimensions
@@ -70,7 +68,6 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
             }
         });
         yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(8).tickFormat(function(d, i) {return "$" + d / 1000 + "K";});
-
 
         // Initial setup
         if(!$scope.didSetUpGraph){
@@ -143,7 +140,6 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         .attr("cx", function(d, i) {return xScale(i);})
         .attr("cy", function(d, i) {return yScale(d.median_income);})
         .attr("r", dotRadius);
-        
 
         data_dots_group.selectAll("circle").on("mouseover", function(d, i) {
             stop = stops[i];
@@ -163,9 +159,8 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
             map_svg.select("circle.stop-marker").remove();
             circle = map_svg.append("circle")
             .attr("class", "stop-marker")
-            .attr("r",4)
+            .attr("r", 4)
             .attr("fill",routeColor)
-            .attr("stroke", "black")
             .attr("cx",marker_coords[0])
             .attr("cy",marker_coords[1]);
         })
@@ -182,10 +177,15 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         // Update the map to show this route
         var route_line = d3.svg.line().x(function(d){return d[0];}).y(function(d){return d[1];}).interpolate("cardinal");
 
-        positions = []; // TODO use map
-        $(stops).each(function(index, stop){positions.push($scope.map_projection([stop.lon, stop.lat]));});
+        // Project lat->lng into coordinates to display on the map
+        positions = stops.map(function(stop){return $scope.map_projection([stop.lon, stop.lat]);});
 
-        map_route_path = map_svg.select("path.route-line");
-        map_route_path.transition().attr("d", route_line(positions)).attr("stroke", routeColor);
+        map_svg.select("path.route-line")
+        .transition()
+        .attr("d", route_line(positions))
+        .attr("stroke", routeColor);
+
+        // show the other routes
+
     };
 }]);
