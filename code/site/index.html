@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" data-ng-app="app">
-
 <head>
   <meta charset="utf-8">
-  <title>Income vs. Transit Stops in the San Francisco Bay Area</title>
+  <title>Inequality &amp; Mass Transit in the Bay Area</title>
   <link href="./assets/css/bootstrap.css" rel="stylesheet">
   <link href="./assets/css/site.css" rel="stylesheet">
   <script src="./assets/libs/jquery.1.9.1.min.js"></script>
@@ -26,9 +25,8 @@
   <div class="container" data-ng-controller="AppCtrl">
     <div class="row">
       <div class="span8" id="intro">
-        <p>
-          How different can the people that ride the same train be? <a href="http://newyorker.com/sandbox/business/subway.html">A recent feature in <i>The New Yorker</i></a>  
-          juxtaposed New York City's subway stops with their residents' incomes. Like NYC, San Francisco has people of <a href="http://www.sfgate.com/realestate/article/RICH-CITY-POOR-CITY-Middle-class-neighborhoods-2494307.php">both extreme povery and wealth</a>, often living toe-to-toe. We wondered how those graphs would look in our neck of the woods. The results show the economic inequality in the Bay Area and its relationship with transit and urban form.
+        <p><a href="http://newyorker.com/sandbox/business/subway.html">A recent feature in <i>The New Yorker</i></a>  
+          juxtaposed New York City's subway stops with their residents' incomes. Like NYC, San Francisco has people of <a href="http://www.sfgate.com/realestate/article/RICH-CITY-POOR-CITY-Middle-class-neighborhoods-2494307.php">both extreme povery and wealth</a>, often living toe-to-toe. We wondered how those graphs would look in our neck of the woods. The results show the Bay Area's economic inequality and its relationship with transit and urban form.
         </p>
         <br/> <br/>
       </div>
@@ -116,7 +114,7 @@
 <div class="span6">
 
  <div id="graph">
-  <div id="instructions"><p>&larr; Click on a route to get started!</p></div>
+  <div id="instructions"><p>&larr; Choose a line to get started!</p></div>
 </div>
 
 </div>
@@ -124,7 +122,7 @@
 
 <div class="row" id="bottom">
 
-<div class="span3" id="share">
+  <div class="span3" id="share">
     <h6>Share</h6>
     <!-- facebook gizmo -->
     <div id="fb-root">
@@ -142,8 +140,7 @@
     <div class="fb-like" data-send="false" data-layout="button_count" data-width="120"
     data-show-faces="false">
   </div>
-
-  <br/>
+<br/>
 
 
   <a href="https://twitter.com/share" class="twitter-share-button" data-via="DanGrover">Tweet</a>
@@ -159,16 +156,14 @@
     }
   }(document, 'script', 'twitter-wjs');
   </script>
-
-  <br/>
-
+<br/>
   <iframe src="http://ghbtns.com/github-btn.html?user=dangrover&amp;repo=sf-transit-inequality&amp;type=watch&amp;count=true"
   allowtransparency="true" frameborder="0" scrolling="0" width="70" height="20">
-  </iframe>
+</iframe>
 
 </div>
 
- <div class="span5">
+<div class="span6">
   <h6>Methodology</h6>
   <p>Stop and route information came from their respective agencies' <a href="https://developers.google.com/transit/gtfs/">GTFS</a> feeds. Income data was gathered from the 2010 US Census, via <a href="http://www.census.gov/developers/">their API</a>, using verbatim the value from the single census tract where each stop is located. In some instances, the stops lie on the boundaries of different tracts, and an improved model might produce a weighted average of all the tracts each stop serves. </p>
 </div>

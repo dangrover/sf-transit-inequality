@@ -67,7 +67,7 @@ path.route-line{
 
 #intro p{
      font-size:14px;
-     line-height: 24px;
+     line-height: 26px;
 }
 
 p {
@@ -90,7 +90,7 @@ div svg {
 }
 
 #graph{
-    padding-left:10px;
+    padding-left:20px;
     z-index:6;
 }
 

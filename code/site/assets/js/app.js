@@ -55,8 +55,8 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         if (routeColor === undefined) routeColor = "#666";
 
         // dimensions
-        var w = 540,
-        h = 270,
+        var w = 580,
+        h = 260,
         hMargin = 65,
         vMargin = 20,
         dotRadius = 5,
@@ -172,7 +172,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
             .attr("cy",marker_coords[1]);
         })
         .on("mousemove", function() {
-            tooltip.style("top", (event.pageY - 10) + "px")
+            tooltip.style("top", (event.pageY - $("body").scrollTop() - 10) + "px")
             .style("left", (event.pageX + 6) + "px");
         })
         .on("mouseout", function() {
