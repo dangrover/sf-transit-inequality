@@ -6,6 +6,8 @@
   <title>Income vs. Transit Stops in the San Francisco Bay Area</title>
   <link href="./assets/css/bootstrap.css" rel="stylesheet">
   <link href="./assets/css/site.css" rel="stylesheet">
+  <script src="./assets/libs/jquery.1.9.1.min.js"></script>
+  <script src="./assets/libs/bootstrap/bootstrap.min.js"></script>
   <script src="./assets/libs/d3/d3.min.js"></script>
   <script src="./assets/libs/topojson.v1.min.js"></script>
   <script src="./assets/libs/angular/angular.min.js"></script>
@@ -25,53 +27,53 @@
     <div class="row">
       <div class="span8" id="intro">
         <p>
-          <a href="http://newyorker.com/sandbox/business/subway.html">A recent feature in <i>The New Yorker</i></a>  
-          juxtaposed New York City's subway stops with their residents' incomes. We were inspired and wondered how those graphs would look in our neck of the woods. Like NYC, San Francisco has people of <a href="http://www.sfgate.com/realestate/article/RICH-CITY-POOR-CITY-Middle-class-neighborhoods-2494307.php">both extreme povery and wealth</a>, often living toe-to-toe. 
+          How different can the people that ride the same train be? <a href="http://newyorker.com/sandbox/business/subway.html">A recent feature in <i>The New Yorker</i></a>  
+          juxtaposed New York City's subway stops with their residents' incomes. Like NYC, San Francisco has people of <a href="http://www.sfgate.com/realestate/article/RICH-CITY-POOR-CITY-Middle-class-neighborhoods-2494307.php">both extreme povery and wealth</a>, often living toe-to-toe. We wondered how those graphs would look in our neck of the woods. The results show the economic inequality in the Bay Area and its relationship with transit and urban form.
         </p>
-        <br/>
+        <br/> <br/>
       </div>
     </div>
     <div class="row" data-ng-show="agencies">
-      <div class="span3">
+      <div class="span3" id="choices">
+        <h4>Lines</h4>
 
-          <!-- MUNI -->
-          <h5>MUNI</h5>
-          <div class="agency-container">
-           <div class="btn-group dropdown muni-routes">
-            <button class="btn btn-small muni-line">
-              <a href="#" data-ng-click="displayRoute('MUNI', '1094')" style="background: #f8a637">J</a>
-            </button>
-            <button class="btn btn-small muni-line">
-              <a href="#" data-ng-click="displayRoute('MUNI', '1196', '#529cbb')" style="background: #529cbb">K</a>
-            </button>
-            <button class="btn btn-small muni-line">
-              <a href="#" data-ng-click="displayRoute('MUNI', '1198')" style="background: #92278f">L</a>
-            </button>
-            <button class="btn btn-small muni-line">
-              <a href="#" data-ng-click="displayRoute('MUNI', '1199')" style="background: #028753">M</a>
-            </button>
-            <button class="btn btn-small muni-line">
-              <a href="#" data-ng-click="displayRoute('MUNI', '1093')" style="background: #00529a">N</a>
-            </button>
-            <button class="btn btn-small muni-line">
-              <a href="#" data-ng-click="displayRoute('MUNI', '1196','#ed1c24')" style="background: #ed1c24">T</a>
-            </button>
+        <!-- MUNI -->
+        <h5>MUNI</h5>
+        <div class="agency-container">
+         <div class="btn-group dropdown muni-routes">
+          <button class="btn btn-small muni-line">
+            <a href="#" data-ng-click="displayRoute('MUNI', '1094')" style="background: #f8a637">J</a>
+          </button>
+          <button class="btn btn-small muni-line">
+            <a href="#" data-ng-click="displayRoute('MUNI', '1196', '#529cbb')" style="background: #529cbb">K</a>
+          </button>
+          <button class="btn btn-small muni-line">
+            <a href="#" data-ng-click="displayRoute('MUNI', '1198')" style="background: #92278f">L</a>
+          </button>
+          <button class="btn btn-small muni-line">
+            <a href="#" data-ng-click="displayRoute('MUNI', '1199')" style="background: #028753">M</a>
+          </button>
+          <button class="btn btn-small muni-line">
+            <a href="#" data-ng-click="displayRoute('MUNI', '1093')" style="background: #00529a">N</a>
+          </button>
+          <button class="btn btn-small muni-line">
+            <a href="#" data-ng-click="displayRoute('MUNI', '1196','#ed1c24')" style="background: #ed1c24">T</a>
+          </button>
 
-            <!-- Busses 'n' stuff -->
-            <a class="dropdown-toggle btn btn-small" id="muni-more" role="button" data-toggle="dropdown" data-target="#" href="#">
-              More <b class="caret"></b>
+          <!-- Busses 'n' stuff -->
+          <a class="dropdown-toggle btn btn-small" id="muni-more" role="button" data-toggle="dropdown" data-target="#" href="#">
+            More <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="muni-more">
+           <li data-ng-repeat="(routeId, route) in (agencies['MUNI'].routes | orderBy:'name')">
+            <a href="#" data-ng-click="displayRoute('MUNI', routeId)" data-ng-hide="route.important">
+              {{route.name}}
             </a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="muni-more">
-             <li data-ng-repeat="(routeId, route) in (agencies['MUNI'].routes | orderBy:'name')">
-              <a href="#" data-ng-click="displayRoute('MUNI', routeId)" data-ng-hide="route.important">
-                {{route.name}}
-              </a>
-            </li>
-          </ul>
-        </div>
+          </li>
+        </ul>
       </div>
+    </div>
 
-      <br/>
 
 
     <!-- BART -->
@@ -87,24 +89,24 @@
     </ul>
   </div>
 
-<!-- CalTrain -->
- <h5>CalTrain</h5>
-      <div class="agency-container">
-        <div class="btn-group caltrain-routes">
-          <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_local_20121001')">
-            <span class="swatch" style="background-color: white"></span>
-            Local
-          </a>
-          <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_limited_20121001')">
-            <span class="swatch" style="background-color: yellow"></span>
-            Limited
-          </a>
-          <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_bullet_20121001')">
-            <span class="swatch" style="background-color: red"></span>
-            Bullet
-          </a>
-        </div>
-      </div>
+  <!-- CalTrain -->
+  <h5>CalTrain</h5>
+  <div class="agency-container">
+    <div class="btn-group caltrain-routes">
+      <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_local_20121001')">
+        <span class="swatch" style="background-color: white"></span>
+        Local
+      </a>
+      <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_limited_20121001')">
+        <span class="swatch" style="background-color: yellow"></span>
+        Limited
+      </a>
+      <a class="btn btn-small" href="#" data-ng-click="displayRoute('CalTrain', 'ct_bullet_20121001')">
+        <span class="swatch" style="background-color: red"></span>
+        Bullet
+      </a>
+    </div>
+  </div>
 
 </div>
 
@@ -114,19 +116,15 @@
 <div class="span6">
 
  <div id="graph">
-  <div id="instructions"><p>&larr; Tap a line to get started!</p></div>
+  <div id="instructions"><p>&larr; Click on a route to get started!</p></div>
 </div>
 
 </div>
 </div><!-- /row -->
 
 <div class="row" id="bottom">
- <div class="span5">
-    <h6>Methodology</h6>
-    <p>Data gathered from the 2010 US Census, using the values from census tracts where the stops are located. Stop and route information gathered from their respective agencies' GTFS feeds.</p>
-</div>
 
-  <div class="pull-right span3">
+<div class="span3" id="share">
     <h6>Share</h6>
     <!-- facebook gizmo -->
     <div id="fb-root">
@@ -145,30 +143,36 @@
     data-show-faces="false">
   </div>
 
-<br/>
-  
+  <br/>
 
-<a href="https://twitter.com/share" class="twitter-share-button" data-via="DanGrover">Tweet</a>
-<script>
-!function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0],
-  p = /^http:/.test(d.location) ? 'http' : 'https';
-  if (!d.getElementById(id)) {
-    js = d.createElement(s);
-    js.id = id;
-    js.src = p + '://platform.twitter.com/widgets.js';
-    fjs.parentNode.insertBefore(js, fjs);
-  }
-}(document, 'script', 'twitter-wjs');
-</script>
 
-<br/>
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="DanGrover">Tweet</a>
+  <script>
+  !function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0],
+    p = /^http:/.test(d.location) ? 'http' : 'https';
+    if (!d.getElementById(id)) {
+      js = d.createElement(s);
+      js.id = id;
+      js.src = p + '://platform.twitter.com/widgets.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }
+  }(document, 'script', 'twitter-wjs');
+  </script>
 
-<iframe src="http://ghbtns.com/github-btn.html?user=dangrover&amp;repo=sf-transit-inequality&amp;type=watch&amp;count=true"
+  <br/>
+
+  <iframe src="http://ghbtns.com/github-btn.html?user=dangrover&amp;repo=sf-transit-inequality&amp;type=watch&amp;count=true"
   allowtransparency="true" frameborder="0" scrolling="0" width="70" height="20">
-</iframe>
+  </iframe>
 
 </div>
+
+ <div class="span5">
+  <h6>Methodology</h6>
+  <p>Stop and route information came from their respective agencies' <a href="https://developers.google.com/transit/gtfs/">GTFS</a> feeds. Income data was gathered from the 2010 US Census, via <a href="http://www.census.gov/developers/">their API</a>, using verbatim the value from the single census tract where each stop is located. In some instances, the stops lie on the boundaries of different tracts, and an improved model might produce a weighted average of all the tracts each stop serves. </p>
+</div>
+
 
 
 

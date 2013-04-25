@@ -41,7 +41,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
     });
 
 
-    // Display the Graph for a particular Route
+    // Display the Graph for a particular route
     $scope.displayRoute = function (agencyName, routeId, colorOverride) {
         console.log("showing route " + routeId + " for agency " + agencyName);
 
@@ -55,13 +55,14 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         if (routeColor === undefined) routeColor = "#666";
 
         // dimensions
-        var w = 550,
-        h = 300,
-        margin = 45,
+        var w = 540,
+        h = 270,
+        hMargin = 65,
+        vMargin = 20,
         dotRadius = 5,
         moneyFormat = d3.format(",");
-        yScale = d3.scale.linear().domain([200000, 0]).range([10, h - margin]);
-        xScale = d3.scale.linear().domain([0, stops.length]).range([margin, w - margin]);
+        yScale = d3.scale.linear().domain([200000, 0]).range([10, h - vMargin]);
+        xScale = d3.scale.linear().domain([0, stops.length]).range([hMargin, w - hMargin]);
         xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(stops.length).tickFormat(function(d, i) {
             if (stops[i]) {
                 return stops[i].name;
@@ -73,16 +74,22 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         if(!$scope.didSetUpGraph){
             graph_container = d3.select("#graph");
             graph_container.html(""); // Empty what was there initially
-            graph_container.append("h3"); // Heading at the top
+            graph_container.append("h3").attr("class", "route-name"); // Heading at the top
 
             // The main SVG where we draw stuff
             svg =  graph_container.append("svg:svg")
             .attr("width", w)
-            .attr("height", h + 140);
+            .attr("height", h + 100);
 
             graph_container.append("div").attr("id","tooltip"); // Hovering tooltip
             svg.append("svg:path").attr("class", "data-line"); // Graph line
             svg.append("g").attr("class","data-dots"); // Graph dots
+
+            svg.append("text")
+            .attr("class", "y-axis-label")
+            .text("Median Household Income")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate(12,"+((h/2)-(vMargin/2))+"), rotate(-90)");
 
             $scope.didSetUpGraph = true;
         }
@@ -103,7 +110,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
          // X axis elements
          svg.append("g")
          .attr("class", "axis x-axis")
-         .attr("transform", "translate(0," + (h - margin) + ")")
+         .attr("transform", "translate(0," + (h - vMargin) + ")")
          .call(xAxis)
          .selectAll("text")
          .style("text-anchor", "end")
@@ -115,7 +122,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         // Y axis elements
         svg.append("g")
         .attr("class", "axis y-axis")
-        .attr("transform", "translate(" + margin + ",0)")
+        .attr("transform", "translate(" + hMargin + ",0)")
         .call(yAxis);
 
         // Data line
