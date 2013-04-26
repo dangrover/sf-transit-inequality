@@ -1,16 +1,21 @@
-from util import *
 import json
 import os
 import transitfeed
 import census
+import requests
 
-# Builds a JSON file containing a transit systems routes coupled with census data
-# Uses GTFS feeds and the census API.
+from config import *
+
+# This script builds a JSON file containing a transit systems 
+# routes coupled with census data. Uses GTFS feeds and the census API.
 
 census_api = census.Census(CENSUS_API_KEY, year=2010)
 
-# There are too many MUNI bus lines, so just stick to the major ones
-MUNI_ALLOWED_ROUTE_SHORT_NAMES = ["49", "30", "38", "22", "1", "14", "5", "9", "47", "31", "8X", "19"]
+# Helper to call an FCC API to grab the correct census tract for a given lat/lon.
+def get_fips(latitude, longitude):
+	r = requests.get("http://data.fcc.gov/api/block/find?format=json&latitude=%f&longitude=%f&showall=true" % (latitude, longitude))
+	return r.json()
+
 
 # Make a file for each agency covered 
 for agency_name, path in ALL_GTFS_PATHS.iteritems():
@@ -29,17 +34,20 @@ for agency_name, path in ALL_GTFS_PATHS.iteritems():
 
 	# Build route list
 	for r in routes:
-		if is_muni:
+		if is_muni: # 
+			#Skip bus lines that we decided not to count
 			if (not r.route_type == 0) and not r.route_short_name in MUNI_ALLOWED_ROUTE_SHORT_NAMES:
 				print "Skipping non-train route %s" % r
 				continue
+
+			# Normalize their route names
 			route_name = r.route_short_name + " " + r.route_long_name
 		else:
 			route_name = r.route_long_name
 
 		# Get an ordered list of stops by looking at this route's "trips."
 		# Some of them will be limited runs, so we want to pick the trip that covers
-		# the most stops. 
+		# the most stops, and use that to represent the route.
 		route_trips = filter(lambda t: t.route_id == r.route_id, trips)
 		if len(route_trips) == 0:
 			continue
@@ -63,7 +71,7 @@ for agency_name, path in ALL_GTFS_PATHS.iteritems():
 			state_fips = fips_info['State']['FIPS']
 			county_fips = fips_info['County']['FIPS'][2:5]
 			block_fips = fips_info['Block']['FIPS']
-			tract_fips = block_fips[5:11]
+			tract_fips = block_fips[5:11] # Block is too specific to have demographic info
 
 			# Look up census info
 			response = census_api.acs.state_county_tract(MEDIAN_INCOME_TABLE_NAME, state_fips, county_fips, tract_fips)
