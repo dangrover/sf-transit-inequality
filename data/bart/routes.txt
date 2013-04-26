@@ -1,0 +1,7 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
+AirBART,AirBART,,SHUTTLE,,3,http://www.bart.gov/guide/airport/inbound_oak.aspx,,
+01,BART,,Pittsburg/Bay Point - SFIA/Millbrae,,1,http://www.bart.gov/schedules/bylineresults.aspx?route=1,ffff33,
+03,BART,,Fremont - Richmond,,1,http://www.bart.gov/schedules/bylineresults.aspx?route=3,ff9933,
+05,BART,,Fremont - Daly City,,1,http://www.bart.gov/schedules/bylineresults.aspx?route=5,339933,
+07,BART,,Richmond - Daly City/Millbrae,,1,http://www.bart.gov/schedules/bylineresults.aspx?route=7,ff0000,
+11,BART,,Dublin/Pleasanton - Daly City,,1,http://www.bart.gov/schedules/bylineresults.aspx?route=11,0099cc,

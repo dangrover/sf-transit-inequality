@@ -1,0 +1,2 @@
+feed_publisher_name,feed_publisher_url,feed_lang
+Bay Area Rapid Transit,http://www.bart.gov,en

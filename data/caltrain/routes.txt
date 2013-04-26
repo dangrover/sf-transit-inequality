@@ -1,0 +1,5 @@
+﻿route_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
+"ct_bullet_20121001",,"Bullet",,2,,E31837,
+"ct_limited_20121001",,"Limited",,2,,FEF0B5,
+"ct_local_20121001",,"Local",,2,,,
+
