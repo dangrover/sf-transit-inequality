@@ -24,10 +24,11 @@ body {
 
 
 p.byline{
-    font-size:11px;
+    font-size:12px;
     font-family: Helvetica, sans-serif;
     text-transform: uppercase;
     color: #444;
+    padding-top:2px;
 }
 
 #instructions{
@@ -202,10 +203,10 @@ div#map{
 }
 
 #share{
-    width:300px;
+    width:320px;
     position:absolute;
-    right:320px;
     top:74px;
+    margin-left:370px;
 }
 #share .fb-like{
     margin-right:15px;
