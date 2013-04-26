@@ -1,54 +1,52 @@
 body {
-    padding:15px;
+    padding: 15px;
     background: #fff;
-    margin-bottom:40px;
+    margin-bottom: 40px;
 }
 
-.container{
+.container {
     margin: 0 auto;
     max-width: 800px;
 }
 
-.top{
-    margin-bottom:36px;
+.top {
+    margin-bottom: 14px;
 }
 
-.top h2{
-    color:#444;
+.top h2 {
+    color: #444;
     text-shadow: #fff 0 1px 0;
 }
 
-.top p{
-   font-size:18px;
-}
-
-
-p.byline{
-    font-size:12px;
-    font-family: Helvetica, sans-serif;
-    text-transform: uppercase;
-    color: #444;
-    padding-top:2px;
-}
-
-#instructions{
-    height:300px;
-    width:100%;
-    text-align: center;
-    padding-top:100px;
-}
-
-#instructions p{
+.top p {
     font-size: 18px;
 }
 
-#graph h3{
+p.byline {
+    font-size: 12px;
+    font-family: Helvetica, sans-serif;
+    text-transform: uppercase;
+    color: #444;
+    padding-top: 2px;
+}
+
+#instructions {
+    height: 300px;
+    width: 100%;
+    text-align: center;
+    padding-top: 100px;
+}
+
+#instructions p {
+    font-size: 18px;
+}
+
+#graph h3 {
     padding-left: 28px;
-    margin:0;
+    margin: 0;
 }
 
 .container {
-
 }
 
 path.data-line {
@@ -56,14 +54,14 @@ path.data-line {
     fill: none;
 }
 
-path.route-line{
+path.route-line {
     stroke-width: 2;
     fill: none;
 }
 
-#intro p{
-   font-size:14px;
-   line-height: 26px;
+#intro p {
+    font-size: 16px;
+    line-height: 26px;
 }
 
 p {
@@ -85,17 +83,17 @@ div svg {
     overflow: visible;
 }
 
-#graph{
-    padding-left:20px;
-    z-index:6;
+#graph {
+    padding-left: 20px;
+    z-index: 6;
 }
 
-
-#choices h4{
-    margin-top:0;
+#choices h4 {
+    margin-top: 0;
 }
-.y-axis-label{
-    font-size:10px;
+
+.y-axis-label {
+    font-size: 10px;
     fill: #666;
 }
 
@@ -111,12 +109,25 @@ div svg {
     font-size: 11px;
 }
 
+.nav-stacked {
+    border-radius: 0;
+}
+
 .nav-stacked > li > a {
-    font-size: 11px;
-    padding-top:2px;
-    padding-bottom:1px;
-    padding-right:5px;
-    padding-left:5px;
+    font-size: 13px;
+    padding-top: 2px;
+    padding-bottom: 1px;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.nav-tabs.nav-stacked > li > a {
+    border: 0;
+    padding: 4px 1px;
+}
+
+.nav-tabs.nav-stacked > li:first-child > a {
+    border-radius: 0;
 }
 
 .swatch {
@@ -129,29 +140,30 @@ div svg {
     vertical-align: middle;
     margin-right: 5px;
     box-shadow: #fff 0 1px 0;
-    position:relative;
-    top:2px;
+    position: relative;
+    top: 2px;
 }
 
-.muni-routes .btn-small{
+.muni-routes .btn-small {
     padding: 2px 1px;
 }
 
+.muni-line {
+    float: left;
+}
+
 .muni-line a {
-    background: red;
-    border-radius: 10px;
+    border-radius: 30px;
     color: white;
     float: left;
-    font-size: 14px;
+    font-size: 19px;
     font-weight: bold;
-    height: 20px;
-    width:20px;
-    line-height: 20px;
-    margin-right: 2px;
-    margin-left:2px;
+    height: 28px;
+    width: 28px;
+    line-height: 28px;
+    margin-right: 4px;
+    margin-left: 0px;
     text-align: center;
-    text-shadow: #000 0 1px 0;
-    box-shadow: #fff 0 1px 0;
 }
 
 .muni-line a:hover {
@@ -162,52 +174,53 @@ div svg {
     clear: both;
 }
 
-div#map{
-    width:525px;
-    height:400px;
-    position:absolute;
-    top:0;
-    right:0;
-    overflow:hidden;
+div#map {
+    width: 525px;
+    height: 400px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    overflow: hidden;
     z-index: -100;
 }
 
-#map #bottom-gradient{
+#map #bottom-gradient {
     background: linear-gradient(
         rgba(255, 255, 255, 0) 0%,
         rgba(255, 255, 255, 1) 100%
-        ); 
-    width:300px;
-    height:110px;
-    position:absolute;
-    bottom:0;
-    right:0
+        );
+    width: 300px;
+    height: 110px;
+    position: absolute;
+    bottom: 0;
+    right: 0
 }
 
-#map .landmass{
-    fill:#e9e9e9;
+#map .landmass {
+    fill: #e9e9e9;
 }
 
-#map circle.stop-marker{
+#map circle.stop-marker {
     stroke: black;
 }
 
-#bottom{
+#bottom {
     border-top: #eee 1px solid;
-    margin-top:10px;
+    margin-top: 10px;
 }
 
-#bottom p{
-    font-size:10px;
-    line-height:16px;
+#bottom p {
+    font-size: 10px;
+    line-height: 16px;
 }
 
-#share{
-    width:320px;
-    position:absolute;
-    top:74px;
-    margin-left:370px;
+#share {
+    width: 320px;
+    position: absolute;
+    top: 74px;
+    margin-left: 370px;
 }
-#share .fb-like{
-    margin-right:15px;
+
+#share .fb-like {
+    margin-right: 15px;
 }
