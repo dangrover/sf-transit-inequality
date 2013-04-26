@@ -13,16 +13,48 @@
   <script src="./assets/js/app.js"></script>
 </head>
 <body>
-  <div class="top">
-    <div class="row">
+  
+
+  <div class="container" data-ng-controller="AppCtrl">
+
+    <div class="top row">
       <div class="span8">
         <h2>Inequality &amp; Mass Transit in the Bay Area</h2>
         <p class="byline">an experiment by <a href="http://twitter.com/dangrover">@dangrover</a> and <a href="http://twitter.com/mikez">@mikez</a></p>
       </div>
+        <div id="share">
+            <!-- facebook gizmo -->
+    <div id="fb-root">
     </div>
+    <script>(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="//connect.facebook.net/en_US/all.js#xfbml=1&appId=196057697206036";fjs.parentNode.insertBefore(js,fjs)})(document,"script","facebook-jssdk");
+    </script>
+    <div class="fb-like" data-send="false" data-layout="button_count" data-width="130"
+    data-show-faces="false">
   </div>
 
-  <div class="container" data-ng-controller="AppCtrl">
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="DanGrover">Tweet</a>
+  <script>
+  !function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0],
+    p = /^http:/.test(d.location) ? 'http' : 'https';
+    if (!d.getElementById(id)) {
+      js = d.createElement(s);
+      js.id = id;
+      js.src = p + '://platform.twitter.com/widgets.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }
+  }(document, 'script', 'twitter-wjs');
+  </script>
+
+  <iframe src="http://ghbtns.com/github-btn.html?user=dangrover&amp;repo=sf-transit-inequality&amp;type=watch&amp;count=true"
+  allowtransparency="true" frameborder="0" scrolling="0" width="70" height="20">
+</iframe>
+</div>
+
+    
+    </div>
+  
+
     <div class="row">
       <div class="span8" id="intro">
         <p><a href="http://newyorker.com/sandbox/business/subway.html">A recent feature in <i>The New Yorker</i></a>  
@@ -122,46 +154,7 @@
 
 <div class="row" id="bottom">
 
-  <div class="span3" id="share">
-    <h6>Share</h6>
-    <!-- facebook gizmo -->
-    <div id="fb-root">
-    </div>
-    <script>
-    (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=196057697206036";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-    </script>
-    <div class="fb-like" data-send="false" data-layout="button_count" data-width="120"
-    data-show-faces="false">
-  </div>
-<br/>
-
-
-  <a href="https://twitter.com/share" class="twitter-share-button" data-via="DanGrover">Tweet</a>
-  <script>
-  !function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0],
-    p = /^http:/.test(d.location) ? 'http' : 'https';
-    if (!d.getElementById(id)) {
-      js = d.createElement(s);
-      js.id = id;
-      js.src = p + '://platform.twitter.com/widgets.js';
-      fjs.parentNode.insertBefore(js, fjs);
-    }
-  }(document, 'script', 'twitter-wjs');
-  </script>
-<br/>
-  <iframe src="http://ghbtns.com/github-btn.html?user=dangrover&amp;repo=sf-transit-inequality&amp;type=watch&amp;count=true"
-  allowtransparency="true" frameborder="0" scrolling="0" width="70" height="20">
-</iframe>
-
-</div>
+  
 
 <div class="span6">
   <h6>Methodology</h6>
@@ -171,15 +164,9 @@
   <p>Have ideas to make this better? <a href="http://github.com/dangrover/sf-transit-inequality">Fork the project</a>! </p>
 </div>
 
-
-
-
 </div>
 
-
-
 </div>
-
 
 <!-- /container -->
 
