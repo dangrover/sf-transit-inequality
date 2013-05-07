@@ -49,7 +49,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
     $scope.isAgencySelected = function(agencyName){
         return (agencyName == $scope.activeAgency);
     }
-    
+
     // Display the Graph for a particular route
     $scope.displayRoute = function(agencyName, routeId, params) {
         console.log("Showing %s route %s", agencyName, routeId);
@@ -66,6 +66,7 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         });
 
         // find the color to use to draw this route in the graph and the map
+        console.log("params = %o", params);
         if(params && params["color_override"]){
             routeColor = params["color_override"];
         }else{
