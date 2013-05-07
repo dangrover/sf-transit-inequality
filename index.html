@@ -61,47 +61,49 @@
       <div class="span3" id="choices" style="border-right: 1px solid #eee;">
         <!-- MUNI -->
         <h5 style="margin-top: 0; margin-bottom: 5px;">MUNI</h5>
-        <div class="agency-container">
+        <div class="agency-container muni" ng-init="agency = 'MUNI'" ng-class="{active : isAgencySelected(agency)}">
           <div class="btn-group dropdown muni-routes">
             <div class="muni-line">
-              <a href="#" data-ng-click="displayRoute('MUNI', '1094')" style="background: #f8a637">J</a>
+              <a href="#" data-ng-click="displayRoute(agency, '1094')" style="background: #f8a637">J</a>
             </div>
             <div class="muni-line">
-              <a href="#" data-ng-click="displayRoute('MUNI', '1196', '#529cbb')" style="background: #529cbb">K</a>
+              <a href="#" data-ng-click="displayRoute(agency, '1196',{'color_override':'#529cbb'})" style="background: #529cbb">K</a>
             </div>
             <div class="muni-line">
-              <a href="#" data-ng-click="displayRoute('MUNI', '1198')" style="background: #92278f">L</a>
+              <a href="#" data-ng-click="displayRoute(agency, '1198')" style="background: #92278f">L</a>
             </div>
             <div class="muni-line">
-              <a href="#" data-ng-click="displayRoute('MUNI', '1199')" style="background: #028753">M</a>
+              <a href="#" data-ng-click="displayRoute(agency, '1199')" style="background: #028753">M</a>
             </div>
             <div class="muni-line">
-              <a href="#" data-ng-click="displayRoute('MUNI', '1093')" style="background: #00529a">N</a>
+              <a href="#" data-ng-click="displayRoute(agency, '1093')" style="background: #00529a" ng-class="{active : isRouteSelected(routeId)}">N</a>
             </div>
             <div class="muni-line">
-              <a href="#" data-ng-click="displayRoute('MUNI', '1196','#ed1c24')" style="background: #ed1c24">T</a>
+              <a href="#" data-ng-click="displayRoute(agency, '1196',{'color_override':'#ed1c24'})" style="background: #ed1c24" ng-class="{active : isRouteSelected(routeId)}">T</a>
             </div>
 
-            <!-- Busses 'n' stuff -->
-            <a class="dropdown-toggle" id="muni-more" role="button" data-toggle="dropdown" data-target="#" href="#">
-              <img src="assets/img/hamburger.png" style="margin-left: 4px; margin-top: 8px;">
+ <a id="muni-more" class="btn btn-link btn-small" data-toggle="dropdown" data-target="#" href="/">
+           More <b class="caret"></b>
             </a>
+
             <ul class="dropdown-menu" role="menu" aria-labelledby="muni-more">
-              <li data-ng-repeat="(routeId, route) in (agencies['MUNI'].routes | orderBy:'name')">
-                <a href="#" data-ng-click="displayRoute('MUNI', routeId)" data-ng-hide="route.important">
+              <li data-ng-repeat="(routeId, route) in (agencies[agency].routes | orderBy:'name')">
+                <a href="#" data-ng-click="displayRoute(agency, routeId)" data-ng-hide="route.important">
                   {{route.name}}
                 </a>
               </li>
             </ul>
+
+          
+            
           </div>
         </div>
 
         <!-- BART -->
-        <h5 style="margin-top: 18px;
-margin-bottom: 0px;">BART</h5>
+        <h5>BART</h5>
         <div class="agency-container">
           <ul class="agency-routes nav nav-tabs nav-stacked">
-            <li data-ng-repeat="(routeId, route) in agencies['BART'].routes">
+            <li data-ng-repeat="(routeId, route) in agencies['BART'].routes" ng-class="{active : isRouteSelected(routeId)}">
               <a href="#" data-ng-click="displayRoute('BART', routeId)">
                 <span class="swatch" data-ng-style="{'background-color': route.color}"></span>
                 {{route.name}}
@@ -110,21 +112,29 @@ margin-bottom: 0px;">BART</h5>
           </ul>
         </div>
 
-        <!-- CalTrain -->
-        <h5 style="margin-top: -6px; margin-bottom: 0">CalTrain</h5>
-        <div class="agency-container">
-          <div class="btn-group caltrain-routes">
-            <a href="#" data-ng-click="displayRoute('CalTrain', 'ct_local_20121001')">
-              <span class="swatch" style="background-color: white"></span>
-            </a>
-            <a href="#" data-ng-click="displayRoute('CalTrain', 'ct_limited_20121001')">
-              <span class="swatch" style="background-color: yellow"></span>
-            </a>
-            <a href="#" data-ng-click="displayRoute('CalTrain', 'ct_bullet_20121001')">
-              <span class="swatch" style="background-color: red"></span>
-            </a>
-          </div>
+
+        <h5>CalTrain</h5>
+        <div class="agency-container" ng-init="agency = 'CalTrain'">
+          <ul class="agency-routes nav nav-tabs nav-stacked">
+            <li data-ng-init="routeId = 'ct_local_20121001'" ng-class="{active : isRouteSelected(routeId)}">
+              <a href="#" data-ng-click="displayRoute(agency, routeId)">
+                <span class="swatch" style="background-color: white"></span> 
+                Local</a>
+            </li>
+            <li data-ng-init="routeId = 'ct_limited_20121001'" ng-class="{active : isRouteSelected(routeId)}">
+              <a href="#" data-ng-click="displayRoute(agency, routeId)">
+                <span class="swatch" style="background-color: yellow"></span> 
+                Limited</a>
+            </li>
+          <li data-ng-init="routeId = 'ct_bullet_20121001'" ng-class="{active : isRouteSelected(routeId)}">
+              <a href="#" data-ng-click="displayRoute(agency, routeId)">
+                <span class="swatch" style="background-color: red"></span> 
+                Bullet</a>
+            </li>
+
+          </ul>
         </div>
+
       </div>
 
       <div class="span6">

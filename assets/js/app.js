@@ -40,10 +40,24 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         map_svg.append("path").attr("class", "route-line"); 
     });
 
+    // Returns whether the given route ID is selected
+    $scope.isRouteSelected = function(routeId){
+        return (routeId == $scope.activeRoute);
+    }
 
+    // Returns whether the given agency  is selected
+    $scope.isAgencySelected = function(agencyName){
+        return (agencyName == $scope.activeAgency);
+    }
+    
     // Display the Graph for a particular route
-    $scope.displayRoute = function (agencyName, routeId, colorOverride) {
-        console.log("showing route " + routeId + " for agency " + agencyName);
+    $scope.displayRoute = function(agencyName, routeId, params) {
+        console.log("Showing %s route %s", agencyName, routeId);
+        
+        console.log("event = %o", $scope);
+
+        $scope.activeRoute = routeId;
+        $scope.activeAgency = agencyName;
 
         // grab our data
         var route = agencyData[agencyName].routes[routeId];
@@ -51,7 +65,12 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
             return agencyData[agencyName].stops[stop_id];
         });
 
-        routeColor = colorOverride ? colorOverride : agencyData[agencyName].routes[routeId].color;
+        // find the color to use to draw this route in the graph and the map
+        if(params && params["color_override"]){
+            routeColor = params["color_override"];
+        }else{
+            routeColor = agencyData[agencyName].routes[routeId].color;
+        }
         if (routeColor === undefined) routeColor = "#666";
 
         // dimensions
@@ -191,8 +210,6 @@ angular.module('app').controller('AppCtrl', ['$scope', 'DATA_SOURCES', function(
         .transition()
         .attr("d", route_line(positions))
         .attr("stroke", routeColor);
-
-        // show the other routes
 
     };
 }]);
