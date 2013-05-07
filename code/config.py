@@ -2,7 +2,6 @@ import os
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 OUTPUT_DIR = SCRIPT_DIR+"/../output"
-STOP_INFO_CSV_NAME = "all-stops.csv"
 
 ALL_GTFS_PATHS = {"BART": SCRIPT_DIR+"/../data/bart",
 			 	 "CalTrain": SCRIPT_DIR+"/../data/caltrain",
