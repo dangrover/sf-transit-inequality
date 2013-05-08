@@ -7,21 +7,25 @@ This **master** branch you’re looking at has the Python code used to generate 
 
 ### Running locally for forking/development
 
-To run the Javascript app locally for experimentation and forking, use a simple web server to serve the necessary assets (CSS, JSON, JS).
+To run the Javascript app locally, you can e.g. use Python's one-line web server.
 
-One easy way to do this is with the [one-line Python web server](http://www.garyrobinson.net/2004/03/one_line_python.html). To do this:
+First go into the repo directory:
 
-    # Go into the repo directory
     cd sf-transit-inequality
-    # Check out the gh-pages branch
+
+Then check out the gh-pages branch:
+
     git checkout gh-pages
-    # Launch the Python server
+
+Launch the Python server:
+
     # In Python 2.x
     python -m SimpleHTTPServer
     # OR, in Python 3.x
     python -m http.server 8000
 
-Then open your browser and navigate to [http://localhost:8000/](http://localhost:8000/).
+Finally, open your browser and navigate to [http://localhost:8000/](http://localhost:8000/).
+
 
 ### Modifying for other cities and demographic data
 To generate the JSON file that the mashup reads data from, run grab_routes.py. 
