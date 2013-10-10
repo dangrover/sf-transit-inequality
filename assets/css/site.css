@@ -231,3 +231,10 @@ div#map {
 #share .fb-like {
     margin-right: 15px;
 }
+
+/* Embeddable version */
+
+body.embeddable div#map {
+    display: none;
+}
+
